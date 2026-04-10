@@ -42,8 +42,14 @@ public class OrderService : IOrderService
             ORDER BY oi.id;
             """, new { OrderId = orderId, Culture = culture });
 
-        return new OrderDto(order.Id, order.UserId, order.Status,
-                            order.TotalAmount, order.CreatedAt, items);
+        return new OrderDto(){
+            Id = order.Id, 
+            UserId = order.UserId, 
+            Status = order.Status,
+            TotalAmount = order.TotalAmount, 
+            CreatedAt = order.CreatedAt, 
+            Items = items 
+        };
     }
 
     // GET ALL (admin)

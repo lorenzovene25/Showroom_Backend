@@ -4,13 +4,27 @@
 //  TICKET
 // ══════════════════════════════════════════════════════════════════
 
-public record TicketDto(
-    int Id, int ExhibitionId, string? ExhibitionTitle,
-    int TierId, string? TierName, decimal TierPrice,
-    int UserId, DateOnly VisitDate,
-    int TimeSlotId, TimeOnly SlotStartTime, TimeOnly SlotEndTime,
-    DateTime PurchasedAt);
+public class TicketDto
+{
+    public int Id { get; set; }
+    public int ExhibitionId { get; set; }
+    public string? ExhibitionTitle { get; set; }
+    public int TierId { get; set; }
+    public string? TierName { get; set; }
+    public decimal TierPrice { get; set; }
+    public int UserId { get; set; }
+    public DateOnly VisitDate { get; set; }
+    public int TimeSlotId { get; set; }
+    public TimeOnly SlotStartTime { get; set; }
+    public TimeOnly SlotEndTime { get; set; }
+    public DateTime PurchasedAt { get; set; }
+}
 
-public record CreateTicketDto(
-    int ExhibitionId, int TierId, int UserId,
-    DateOnly VisitDate, int TimeSlotId);
+public class CreateTicketDto
+{
+    public int ExhibitionId { get; set; }
+    public int TierId { get; set; }
+    public int UserId { get; set; }
+    public DateOnly VisitDate { get; set; }
+    public int TimeSlotId { get; set; }
+}

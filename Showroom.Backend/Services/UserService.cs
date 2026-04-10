@@ -4,11 +4,6 @@ using Showroom.Backend.Dtos;
 
 namespace Showroom.Backend.Services;
 
-// ══════════════════════════════════════════════════════════════════
-//  USER SERVICE
-//  Note: PasswordHash must be pre-hashed by the auth layer before
-//        it reaches this service (e.g. BCrypt in the controller).
-// ══════════════════════════════════════════════════════════════════
 public class UserService : IUserService
 {
     private readonly string _connectionString;
@@ -156,5 +151,25 @@ public class UserService : IUserService
         using var conn = Conn();
         return await conn.ExecuteAsync(
             "DELETE FROM users WHERE id = @Id", new { Id = id }) > 0;
+    }
+
+    public Task<IEnumerable<TicketDto>> GetTicketsAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<OrderDto>> GetOrdersAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<OrderDto?> GetOrderByIdAsync(int id, int orderId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<CartDto?> GetCartAsync(int id)
+    {
+        throw new NotImplementedException();
     }
 }

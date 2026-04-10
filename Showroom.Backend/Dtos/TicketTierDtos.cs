@@ -4,20 +4,38 @@
 //  TICKET TIER
 // ══════════════════════════════════════════════════════════════════
 
-public record TicketTierDto(
-    int Id, string Type, decimal Price,
+public class TicketTierDto
+{
+    public int Id { get; set; }
+    public string Type { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+
     // from ticket_tier_translations (culture-aware)
-    string? Name, string? Description);
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+}
 
-public record CreateTicketTierDto(
-    string Type, decimal Price,
-    string Culture = "en",
-    string? Name = null, string? Description = null);
+public class CreateTicketTierDto
+{
+    public string Type { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public string Culture { get; set; } = "en";
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+}
 
-public record UpdateTicketTierDto(
-    string Type, decimal Price,
-    string? Name = null, string? Description = null);
+public class UpdateTicketTierDto
+{
+    public string Type { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+}
 
-public record PatchTicketTierDto(
-    string? Type = null, decimal? Price = null,
-    string? Name = null, string? Description = null);
+public class PatchTicketTierDto
+{
+    public string? Type { get; set; }
+    public decimal? Price { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+}

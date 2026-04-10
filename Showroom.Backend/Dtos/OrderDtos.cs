@@ -1,20 +1,42 @@
 ﻿namespace Showroom.Backend.Dtos;
 
-
-
-
 // ══════════════════════════════════════════════════════════════════
 //  ORDER
 // ══════════════════════════════════════════════════════════════════
 
-public record OrderDto(
-    int Id, int UserId, string Status, decimal TotalAmount,
-    DateTime CreatedAt, IEnumerable<OrderItemDto> Items);
+public class OrderDto
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public string Status { get; set; } = string.Empty;
+    public decimal TotalAmount { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public IEnumerable<OrderItemDto> Items { get; set; } = [];
+}
 
-public record OrderItemDto(
-    int Id, int OrderId, int SouvenirId, string? SouvenirName,
-    int Quantity, decimal UnitPrice);
+public class OrderItemDto
+{
+    public int Id { get; set; }
+    public int OrderId { get; set; }
+    public int SouvenirId { get; set; }
+    public string? SouvenirName { get; set; }
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
+}
 
-public record CreateOrderDto(int UserId, IEnumerable<CreateOrderItemDto> Items);
-public record CreateOrderItemDto(int SouvenirId, int Quantity);
-public record PatchOrderStatusDto(string Status);
+public class CreateOrderDto
+{
+    public int UserId { get; set; }
+    public IEnumerable<CreateOrderItemDto> Items { get; set; } = [];
+}
+
+public class CreateOrderItemDto
+{
+    public int SouvenirId { get; set; }
+    public int Quantity { get; set; }
+}
+
+public class PatchOrderStatusDto
+{
+    public string Status { get; set; } = string.Empty;
+}

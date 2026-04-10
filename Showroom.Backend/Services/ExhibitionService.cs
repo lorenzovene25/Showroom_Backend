@@ -220,4 +220,13 @@ public class ExhibitionService : IExhibitionService
             }, tx);
     }
 
+    public Task<IEnumerable<ArtworkDto>> GetAllArtworksAsync(string culture = "en")
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<ExhibitionTimeSlotDto>> GetAllTimeSlotsAsync(string culture = "en")
+    {
+        throw new NotImplementedException();
+    }
 }

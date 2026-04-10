@@ -4,32 +4,67 @@
 //  SOUVENIR
 // ══════════════════════════════════════════════════════════════════
 
-public record SouvenirDto(
-    int Id, string? ArchiveId, int CategoryId, string? CategorySlug,
-    decimal Price, bool InStock, int QuantityAvailable,
-    string? ImageUrl, string? Specifications,
+public class SouvenirDto
+{
+    public int Id { get; set; }
+    public string? ArchiveId { get; set; }
+    public int CategoryId { get; set; }
+    public string? CategorySlug { get; set; }
+    public decimal Price { get; set; }
+    public bool InStock { get; set; }
+    public int QuantityAvailable { get; set; }
+    public string? ImageUrl { get; set; }
+    public string? Specifications { get; set; }
+
     // from souvenirs_translations (culture-aware)
-    string? Name, string? ShortDescription, string? FullDescription,
-    string? TranslatedSpecifications);
+    public string? Name { get; set; }
+    public string? ShortDescription { get; set; }
+    public string? FullDescription { get; set; }
+    public string? TranslatedSpecifications { get; set; }
+}
 
-public record CreateSouvenirDto(
-    int CategoryId, decimal Price,
-    string? ArchiveId = null, bool InStock = true, int QuantityAvailable = 0,
-    string? ImageUrl = null, string? Specifications = null,
-    string Culture = "en",
-    string? Name = null, string? ShortDescription = null,
-    string? FullDescription = null, string? TranslatedSpecifications = null);
+public class CreateSouvenirDto
+{
+    public int CategoryId { get; set; }
+    public decimal Price { get; set; }
+    public string? ArchiveId { get; set; }
+    public bool InStock { get; set; } = true;
+    public int QuantityAvailable { get; set; } = 0;
+    public string? ImageUrl { get; set; }
+    public string? Specifications { get; set; }
+    public string Culture { get; set; } = "en";
+    public string? Name { get; set; }
+    public string? ShortDescription { get; set; }
+    public string? FullDescription { get; set; }
+    public string? TranslatedSpecifications { get; set; }
+}
 
-public record UpdateSouvenirDto(
-    int CategoryId, decimal Price,
-    string? ArchiveId = null, bool InStock = true, int QuantityAvailable = 0,
-    string? ImageUrl = null, string? Specifications = null,
-    string? Name = null, string? ShortDescription = null,
-    string? FullDescription = null, string? TranslatedSpecifications = null);
+public class UpdateSouvenirDto
+{
+    public int CategoryId { get; set; }
+    public decimal Price { get; set; }
+    public string? ArchiveId { get; set; }
+    public bool InStock { get; set; } = true;
+    public int QuantityAvailable { get; set; } = 0;
+    public string? ImageUrl { get; set; }
+    public string? Specifications { get; set; }
+    public string? Name { get; set; }
+    public string? ShortDescription { get; set; }
+    public string? FullDescription { get; set; }
+    public string? TranslatedSpecifications { get; set; }
+}
 
-public record PatchSouvenirDto(
-    int? CategoryId = null, decimal? Price = null,
-    string? ArchiveId = null, bool? InStock = null, int? QuantityAvailable = null,
-    string? ImageUrl = null, string? Specifications = null,
-    string? Name = null, string? ShortDescription = null,
-    string? FullDescription = null, string? TranslatedSpecifications = null);
+public class PatchSouvenirDto
+{
+    public int? CategoryId { get; set; }
+    public decimal? Price { get; set; }
+    public string? ArchiveId { get; set; }
+    public bool? InStock { get; set; }
+    public int? QuantityAvailable { get; set; }
+    public string? ImageUrl { get; set; }
+    public string? Specifications { get; set; }
+    public string? Name { get; set; }
+    public string? ShortDescription { get; set; }
+    public string? FullDescription { get; set; }
+    public string? TranslatedSpecifications { get; set; }
+}

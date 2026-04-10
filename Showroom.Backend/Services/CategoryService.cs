@@ -17,24 +17,48 @@ public class CategoryService : ICategoryService
     public async Task<IEnumerable<CategoryDto>> GetAllAsync()
     {
         using var conn = Conn();
-        return await conn.QueryAsync<CategoryDto>(
-            "SELECT id AS Id, slug AS Slug, name AS Name, description AS Description FROM categories ORDER BY name");
+        string query = """
+            SELECT 
+                id          AS Id, 
+                slug        AS Slug, 
+                name        AS Name, 
+                description AS Description
+            FROM public.categories
+            ORDER BY name;
+            """;
+        return await conn.QueryAsync<CategoryDto>(query);
     }
 
     // GET BY ID
     public async Task<CategoryDto?> GetByIdAsync(int id)
     {
         using var conn = Conn();
-        return await conn.QuerySingleOrDefaultAsync<CategoryDto>(
-            "SELECT id AS Id, slug AS Slug, name AS Name, description AS Description FROM categories WHERE id = @Id", new { Id = id });
+        string query = """
+            SELECT 
+                id AS Id, 
+                slug AS Slug, 
+                name AS Name, 
+                description AS Description 
+            FROM public.categories 
+            WHERE id = @Id
+            """;
+        return await conn.QuerySingleOrDefaultAsync<CategoryDto>(query , new { Id = id });
     }
 
     // GET BY SLUG
     public async Task<CategoryDto?> GetBySlugAsync(string slug)
     {
         using var conn = Conn();
-        return await conn.QuerySingleOrDefaultAsync<CategoryDto>(
-            "SELECT id AS Id, slug AS Slug, name AS Name, description AS Description FROM categories WHERE slug = @Slug", new { Slug = slug });
+        string query = """
+            SELECT 
+                id AS Id, 
+                slug AS Slug, 
+                name AS Name, 
+                description AS Description 
+            FROM public.categories 
+            WHERE slug = @Slug
+            """;
+        return await conn.QuerySingleOrDefaultAsync<CategoryDto>(query, new { Slug = slug });
     }
 
     // POST
@@ -85,5 +109,35 @@ public class CategoryService : ICategoryService
         using var conn = Conn();
         return await conn.ExecuteAsync(
             "DELETE FROM categories WHERE id = @Id", new { Id = id }) > 0;
+    }
+
+    public Task<IEnumerable<CategoryDto>> GetAllAsync(string culture = "en")
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<CategoryDto?> GetByIdAsync(int id, string culture = "en")
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<SouvenirDto>> GetSouvenirsByCategoryIdAsync(int id, string culture = "en")
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<CategoryDto?> GetBySlugAsync(string slug, string culture = "en")
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<CategoryDto?> PatchAsync(int id, PatchCategoryDto dto, string culture = "en")
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<CategoryDto?> UpdateAsync(int id, UpdateCategoryDto dto, string culture = "en")
+    {
+        throw new NotImplementedException();
     }
 }

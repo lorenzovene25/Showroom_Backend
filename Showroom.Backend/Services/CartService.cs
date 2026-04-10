@@ -57,7 +57,10 @@ public class CartService : ICartService
             ORDER BY ci.id;
             """, new { CartId = cartId, Culture = culture });
 
-        return new CartDto(cart.Id, cart.CreatedAt, items);
+        return new CartDto()
+        {
+            Id = cart.Id, CreatedAt = cart.CreatedAt, Items = items
+        };
     }
 
     // POST — create a bare cart (used during user registration)

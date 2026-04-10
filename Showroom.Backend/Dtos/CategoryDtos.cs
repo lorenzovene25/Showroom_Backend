@@ -4,14 +4,31 @@
 //  CATEGORY
 // ══════════════════════════════════════════════════════════════════
 
-public record CategoryDto(
-    int Id, string Slug, string Name, string? Description);
+public class CategoryDto
+{
+    public int Id { get; set; }
+    public string Slug { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+}
 
-public record CreateCategoryDto(
-    string Slug, string Name, string? Description = null);
+public class CreateCategoryDto
+{
+    public string Slug { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+}
 
-public record UpdateCategoryDto(
-    string Slug, string Name, string? Description = null);
+public class UpdateCategoryDto
+{
+    public string Slug { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+}
 
-public record PatchCategoryDto(
-    string? Slug = null, string? Name = null, string? Description = null);
+public class PatchCategoryDto
+{
+    public string? Slug { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+}

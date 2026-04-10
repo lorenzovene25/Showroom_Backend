@@ -1,8 +1,21 @@
+using Microsoft.AspNetCore.RateLimiting;
+using PW.WebApi.Endpoints;
 using Showroom.Backend;
-using Showroom.Backend.Services;
 using Showroom.Backend.Endpoints;
+using Showroom.Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("RateLimit", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = 100;
+        limiterOptions.Window = TimeSpan.FromMinutes(1);
+        limiterOptions.QueueLimit = 0;
+    });
+    options.RejectionStatusCode = 429;
+});
 
 builder.Services.AddOpenApi();
 
@@ -20,6 +33,17 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
+//global error handler per catturare eccezioni non gestite e restituire una risposta JSON standardizzata
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { error = "Si è verificato un errore interno al server." });
+    });
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -35,6 +59,6 @@ app.MapArtworkEndpoints();
 app.MapExhibitionEndpoints();
 app.MapSouvenirEndpoints();
 app.MapUserEndpoints();
-app.MapTicketEndpoints();
+app.MapCategoryEndpoints();
 
 app.Run();

@@ -1,60 +1,73 @@
-﻿using Showroom.Backend.Dtos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Showroom.Backend.Dtos;
 using Showroom.Backend.Services;
+using Showroom.Models;
 
-namespace Showroom.Backend.Endpoints;
-
-// ══════════════════════════════════════════════════════════════════
-//  MOSTRE  (Exhibitions)
-// ══════════════════════════════════════════════════════════════════
-public static class ExhibitionEndpoints
+namespace PW.WebApi.Endpoints
 {
-
-    public static void MapExhibitionEndpoints(this IEndpointRouteBuilder app)
+    public static class ExhibitionsEndpoints
     {
-        // GET /mostre?culture=en
-        app.MapGet("/mostre", async (IExhibitionService svc, string culture = "en") =>
+        public static void MapExhibitionEndpoints(this IEndpointRouteBuilder route)
         {
-            var result = await svc.GetAllAsync(culture);
-            return Results.Ok(result);
-        })
-        .WithName("GetMostre")
-        .WithTags("Mostre")
-        .WithSummary("Restituisce tutte le mostre")
-        .Produces<IEnumerable<ExhibitionDto>>();
+            var group = route.MapGroup("/api/exhibitions")
+                             .WithTags("Exhibitions")
+                             .RequireRateLimiting("RateLimit");
 
-        // GET /mostre/{id}?culture=en
-        app.MapGet("/mostre/{id:int}", async (int id, IExhibitionService svc, string culture = "en") =>
-        {
-            var result = await svc.GetByIdAsync(id, culture);
-            return result is null ? Results.NotFound() : Results.Ok(result);
-        })
-        .WithName("GetMostraById")
-        .WithTags("Mostre")
-        .WithSummary("Restituisce una mostra per ID")
-        .Produces<ExhibitionDto>()
-        .ProducesProblem(404);
+            group.MapGet("", GetExhibitionsAsync)
+                 .WithName("GetExhibitionsList")
+                 .WithDescription("Get list of exhibitions");
 
-        // POST /mostre
-        app.MapPost("/mostre", async (CreateExhibitionDto dto, IExhibitionService svc) =>
-        {
-            var created = await svc.CreateAsync(dto);
-            return Results.Created($"/mostre/{created.Id}", created);
-        })
-        .WithName("CreateMostra")
-        .WithTags("Mostre")
-        .WithSummary("Crea una nuova mostra")
-        .Produces<ExhibitionDto>(201);
+            group.MapGet("{id:int}", GetExhibitionByIdAsync)
+                 .WithName("GetExhibitionById")
+                 .WithDescription("Get detailed exhibition information");
 
-        // PATCH /mostre/{id}?culture=en
-        app.MapPatch("/mostre/{id:int}", async (int id, PatchExhibitionDto dto, IExhibitionService svc, string culture = "en") =>
+            group.MapGet("{id:int}/timeslots", GetExhibitionTimeSlotsByIdAsync)
+                 .WithName("GetExhibitionTimeSlotsById")
+                 .WithDescription("Get exhibition time slots by ID");
+            
+            group.MapGet("{id:int}/artworks", GetExhibitionArtworksByIdAsync)
+                 .WithName("GetExhibitionArtworksById")
+                 .WithDescription("Get exhibition artworks by ID");
+        }
+
+        private static async Task<Results<Ok<IEnumerable<ArtworkDto>>, NotFound>> GetExhibitionArtworksByIdAsync(int id, IExhibitionService service, HttpContext context, string culture = "en")
         {
-            var result = await svc.PatchAsync(id, dto, culture);
-            return result is null ? Results.NotFound() : Results.Ok(result);
-        })
-        .WithName("PatchMostra")
-        .WithTags("Mostre")
-        .WithSummary("Aggiorna parzialmente una mostra")
-        .Produces<ExhibitionDto>()
-        .ProducesProblem(404);
+            var items = await service.GetAllArtworksAsync(culture);
+
+            if (items is null || !items.Any())
+                return TypedResults.NotFound();
+
+            return TypedResults.Ok(items);
+        }
+
+        private static async Task<Results<Ok<IEnumerable<ExhibitionTimeSlotDto>>, NotFound>> GetExhibitionTimeSlotsByIdAsync(int id, IExhibitionService service, HttpContext context, string culture = "en")
+        {
+            var items = await service.GetAllTimeSlotsAsync(culture);
+
+            if (items is null || !items.Any())
+                return TypedResults.NotFound();
+
+            return TypedResults.Ok(items);
+        }
+
+        public static async Task<Results<Ok<IEnumerable<ExhibitionDto>>, NotFound>> GetExhibitionsAsync(IExhibitionService service, HttpContext context, string culture = "en")
+        {
+            var items = await service.GetAllAsync(culture);
+
+            if (items is null || !items.Any())
+                return TypedResults.NotFound();
+
+            return TypedResults.Ok(items);
+        }
+
+        public static async Task<Results<Ok<ExhibitionDto>, NotFound>> GetExhibitionByIdAsync(int id, IExhibitionService service, HttpContext context, string culture = "en")
+        {
+            var item = await service.GetByIdAsync(id, culture);
+
+            if (item is null)
+                return TypedResults.NotFound();
+
+            return TypedResults.Ok(item);
+        }
     }
 }
