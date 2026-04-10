@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Showroom.Backend/Showroom.Backend.csproj" />
+  <Project Path="Showroom.Models/Showroom.Models.csproj" />
+</Solution>
