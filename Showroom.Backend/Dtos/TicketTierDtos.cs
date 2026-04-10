@@ -1,16 +1,10 @@
 ﻿namespace Showroom.Backend.Dtos;
 
-// ══════════════════════════════════════════════════════════════════
-//  TICKET TIER
-// ══════════════════════════════════════════════════════════════════
-
 public class TicketTierDto
 {
     public int Id { get; set; }
     public string Type { get; set; } = string.Empty;
     public decimal Price { get; set; }
-
-    // from ticket_tier_translations (culture-aware)
     public string? Name { get; set; }
     public string? Description { get; set; }
 }

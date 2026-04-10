@@ -1,9 +1,5 @@
 ﻿namespace Showroom.Backend.Dtos;
 
-// ══════════════════════════════════════════════════════════════════
-//  SOUVENIR
-// ══════════════════════════════════════════════════════════════════
-
 public class SouvenirDto
 {
     public int Id { get; set; }
@@ -15,9 +11,7 @@ public class SouvenirDto
     public int QuantityAvailable { get; set; }
     public string? ImageUrl { get; set; }
     public string? Specifications { get; set; }
-
-    // from souvenirs_translations (culture-aware)
-    public string? Name { get; set; }
+        public string? Name { get; set; }
     public string? ShortDescription { get; set; }
     public string? FullDescription { get; set; }
     public string? TranslatedSpecifications { get; set; }

@@ -31,3 +31,11 @@ public class PatchCartItemDto
 {
     public int Quantity { get; set; }
 }
+
+public class CheckoutItemDto
+{
+    public int CartId { get; set; }
+    public int SouvenirId { get; set; }
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
+}

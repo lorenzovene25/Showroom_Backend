@@ -5,6 +5,7 @@ namespace Showroom.Backend.Services;
 public interface ICartService
 {
     Task<CartItemDto?> AddItemAsync(int cartId, AddCartItemDto dto, string culture = "en");
+    Task<bool> CheckoutAsync(int userId, bool isPaymentSuccessful);
     Task ClearAsync(int cartId);
     Task<int> CreateCartAsync();
     Task<CartDto?> GetByIdAsync(int cartId, string culture = "en");
