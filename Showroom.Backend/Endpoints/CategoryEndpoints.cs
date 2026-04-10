@@ -31,33 +31,54 @@ namespace Showroom.Backend.Endpoints
                 .WithSummary("Restituisce i souvenir di una categoria per ID");
         }
 
-        private static async Task<Results<Ok<IEnumerable<SouvenirDto>>, NotFound>> GetCategorySouvenirsAsync(int id, ICategoryService service, HttpContext context, string culture = "en")
+        private static async Task<Results<Ok<IEnumerable<SouvenirDto>>, NotFound>> GetCategorySouvenirsAsync(int id, ICategoryService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")
         {
+            var logger = loggerFactory.CreateLogger("CategoryEndpoints");
+            logger.LogInformation("Fetching souvenirs for category ID: {CategoryId} - Culture: {Culture}", id, culture);
+
             var items = await service.GetSouvenirsByCategoryIdAsync(id, culture);
 
             if (items is null || !items.Any())
+            {
+                logger.LogWarning("No souvenirs found for category ID: {CategoryId}", id);
                 return TypedResults.NotFound();
+            }
 
+            logger.LogInformation("Successfully fetched {Count} souvenirs for category ID: {CategoryId}", items.Count(), id);
             return TypedResults.Ok(items);
         }
 
-        private static async Task<Results<Ok<CategoryDto>, NotFound>> GetCategoryByIdAsync(int id, ICategoryService service, HttpContext context)
+        private static async Task<Results<Ok<CategoryDto>, NotFound>> GetCategoryByIdAsync(int id, ICategoryService service, ILoggerFactory loggerFactory, HttpContext context)
         {
+            var logger = loggerFactory.CreateLogger("CategoryEndpoints");
+            logger.LogInformation("Fetching category by ID: {CategoryId}", id);
+
             var item = await service.GetByIdAsync(id);
 
             if (item is null)
-                return TypedResults.NotFound(); 
-            return TypedResults.Ok(item);
+            {
+                logger.LogWarning("Category not found - ID: {CategoryId}", id);
+                return TypedResults.NotFound();
+            }
 
+            logger.LogInformation("Category found - ID: {CategoryId}", id);
+            return TypedResults.Ok(item);
         }
 
-        private static async Task<Results<Ok<IEnumerable<CategoryDto>>, NotFound>> GetCategoriesAsync(ICategoryService service, HttpContext context)
+        private static async Task<Results<Ok<IEnumerable<CategoryDto>>, NotFound>> GetCategoriesAsync(ICategoryService service, ILoggerFactory loggerFactory, HttpContext context)
         {
+            var logger = loggerFactory.CreateLogger("CategoryEndpoints");
+            logger.LogInformation("Fetching all categories");
+
             var items = await service.GetAllAsync();
 
             if (items is null || !items.Any())
+            {
+                logger.LogWarning("No categories found");
                 return TypedResults.NotFound();
+            }
 
+            logger.LogInformation("Successfully fetched {Count} categories", items.Count());
             return TypedResults.Ok(items);
         }
     }

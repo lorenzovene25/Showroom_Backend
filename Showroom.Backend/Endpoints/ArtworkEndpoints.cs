@@ -23,13 +23,18 @@ public static class ArtworkEndpoints
             .WithSummary("Restituisce un'opera per ID");
     }
 
-    public static async Task<Results<Ok<IEnumerable<ArtworkDto>>, NotFound>> GetArtworksAsync(IArtworkService service, HttpContext context, string culture = "en")
+    public static async Task<Results<Ok<IEnumerable<ArtworkDto>>, NotFound>> GetArtworksAsync(IArtworkService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")
     {
+        var logger = loggerFactory.CreateLogger("ArtworkEndpoints");
+        logger.LogInformation("Fetching all artworks - Culture: {Culture}", culture);
 
         var items = await service.GetAllAsync(culture);
 
         if (items is null || !items.Any())
+        {
+            logger.LogWarning("No artworks found for culture: {Culture}", culture);
             return TypedResults.NotFound();
+        }
 
         var result = items.Select(artwork => new ArtworkDto
         {
@@ -46,16 +51,24 @@ public static class ArtworkEndpoints
             Camera = artwork.Camera
         });
 
+        logger.LogInformation("Successfully fetched {Count} artworks - Culture: {Culture}", result.Count(), culture);
         return TypedResults.Ok(result);
     }
 
-    public static async Task<Results<Ok<ArtworkDto>, NotFound>> GetArtworkByIdAsync(int id, IArtworkService service, HttpContext context, string culture = "en")
+    public static async Task<Results<Ok<ArtworkDto>, NotFound>> GetArtworkByIdAsync(int id, IArtworkService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")
     {
+        var logger = loggerFactory.CreateLogger("ArtworkEndpoints");
+        logger.LogInformation("Fetching artwork by ID: {ArtworkId} - Culture: {Culture}", id, culture);
+
         var item = await service.GetByIdAsync(id, culture);
 
         if (item is null)
+        {
+            logger.LogWarning("Artwork not found - ID: {ArtworkId}", id);
             return TypedResults.NotFound();
+        }
 
+        logger.LogInformation("Artwork found - ID: {ArtworkId}", id);
         return TypedResults.Ok(item);
     }
 }

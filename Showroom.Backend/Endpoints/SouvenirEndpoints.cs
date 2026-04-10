@@ -23,15 +23,31 @@ public static class SouvenirEndpoints
         .WithSummary("Restituisce un souvenir per ID");
     }
 
-    public static async Task<Results<Ok<IEnumerable<SouvenirDto>>, NotFound>> GetSouvenirsAsync(ISouvenirService service, HttpContext context, string culture = "en")
+    public static async Task<Results<Ok<IEnumerable<SouvenirDto>>, NotFound>> GetSouvenirsAsync(ISouvenirService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")
     {
+        var logger = loggerFactory.CreateLogger("SouvenirEndpoints");
+        logger.LogInformation("Fetching all souvenirs - Culture: {Culture}", culture);
+
         var result = await service.GetAllAsync(culture);
+
+        logger.LogInformation("Successfully fetched {Count} souvenirs - Culture: {Culture}", result?.Count() ?? 0, culture);
         return TypedResults.Ok(result);
     }
 
-    public static async Task<Results<Ok<SouvenirDto>, NotFound>> GetSouvenirsByIdAsync(int id, ISouvenirService service, HttpContext context, string culture = "en")
+    public static async Task<Results<Ok<SouvenirDto>, NotFound>> GetSouvenirsByIdAsync(int id, ISouvenirService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")
     {
+        var logger = loggerFactory.CreateLogger("SouvenirEndpoints");
+        logger.LogInformation("Fetching souvenir by ID: {SouvenirId} - Culture: {Culture}", id, culture);
+
         var result = await service.GetByIdAsync(id, culture);
-        return result is null ? TypedResults.NotFound() : TypedResults.Ok(result);
+
+        if (result is null)
+        {
+            logger.LogWarning("Souvenir not found - ID: {SouvenirId}", id);
+            return TypedResults.NotFound();
+        }
+
+        logger.LogInformation("Souvenir found - ID: {SouvenirId}", id);
+        return TypedResults.Ok(result);
     }
 }

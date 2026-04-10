@@ -2,10 +2,6 @@
 
 namespace Showroom.Backend.Dtos;
 
-// ══════════════════════════════════════════════════════════════════
-//  USER DTOs
-// ══════════════════════════════════════════════════════════════════
-
 public class UserDto
 {
     public int Id { get; set; }
