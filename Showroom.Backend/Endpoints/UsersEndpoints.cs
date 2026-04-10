@@ -50,27 +50,27 @@ public static class UserEndpoints
         return result is null ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
 
-    private static async Task<Results<Ok<IEnumerable<TicketDto>>, NotFound>> GetUserTickets(int userId, IUserService service)
+    private static async Task<Results<Ok<IEnumerable<TicketDto>>, NotFound>> GetUserTickets(int userId, IUserService service, string culture = "en")
     {
-        var result = await service.GetTicketsAsync(userId);
+        var result = await service.GetTicketsAsync(userId, culture);
         return result is null ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
 
-    private static async Task<Results<Ok<IEnumerable<OrderDto>>, NotFound>> GetUserOrders(int userId, IUserService service)
+    private static async Task<Results<Ok<IEnumerable<OrderDto>>, NotFound>> GetUserOrders(int userId, IUserService service, string culture = "en")
     {
-        var result = await service.GetOrdersAsync(userId);
+        var result = await service.GetOrdersAsync(userId, culture);
         return result is null ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
 
-    private static async Task<Results<Ok<OrderDto>, NotFound>> GetUserOrderById(int userId, int orderId, IUserService service)
+    private static async Task<Results<Ok<OrderDto>, NotFound>> GetUserOrderById(int userId, int orderId, IUserService service, string culture = "en")
     {
-        var result = await service.GetOrderByIdAsync(userId, orderId);
+        var result = await service.GetOrderByIdAsync(userId, orderId, culture);
         return result is null ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
 
-    private static async Task<Results<Ok<CartDto>, NotFound>> GetUserCart(int userId, IUserService service)
+    private static async Task<Results<Ok<CartDto>, NotFound>> GetUserCart(int userId, IUserService service, string culture = "en")
     {
-        var result = await service.GetCartAsync(userId);
+        var result = await service.GetCartAsync(userId, culture);
         return result is null ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
 

@@ -41,9 +41,9 @@ namespace Showroom.Backend.Endpoints
             return TypedResults.Ok(items);
         }
 
-        private static async Task<Results<Ok<CategoryDto>, NotFound>> GetCategoryByIdAsync(int id, ICategoryService service, HttpContext context, string culture = "en")
+        private static async Task<Results<Ok<CategoryDto>, NotFound>> GetCategoryByIdAsync(int id, ICategoryService service, HttpContext context)
         {
-            var item = await service.GetByIdAsync(id, culture);
+            var item = await service.GetByIdAsync(id);
 
             if (item is null)
                 return TypedResults.NotFound(); 
@@ -51,9 +51,9 @@ namespace Showroom.Backend.Endpoints
 
         }
 
-        private static async Task<Results<Ok<IEnumerable<CategoryDto>>, NotFound>> GetCategoriesAsync(ICategoryService service, HttpContext context, string culture = "en")
+        private static async Task<Results<Ok<IEnumerable<CategoryDto>>, NotFound>> GetCategoriesAsync(ICategoryService service, HttpContext context)
         {
-            var items = await service.GetAllAsync(culture);
+            var items = await service.GetAllAsync();
 
             if (items is null || !items.Any())
                 return TypedResults.NotFound();

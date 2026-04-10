@@ -32,7 +32,7 @@ namespace PW.WebApi.Endpoints
 
         private static async Task<Results<Ok<IEnumerable<ArtworkDto>>, NotFound>> GetExhibitionArtworksByIdAsync(int id, IExhibitionService service, HttpContext context, string culture = "en")
         {
-            var items = await service.GetAllArtworksAsync(culture);
+            var items = await service.GetAllArtworksAsync(id, culture);
 
             if (items is null || !items.Any())
                 return TypedResults.NotFound();
@@ -42,7 +42,7 @@ namespace PW.WebApi.Endpoints
 
         private static async Task<Results<Ok<IEnumerable<ExhibitionTimeSlotDto>>, NotFound>> GetExhibitionTimeSlotsByIdAsync(int id, IExhibitionService service, HttpContext context, string culture = "en")
         {
-            var items = await service.GetAllTimeSlotsAsync(culture);
+            var items = await service.GetAllTimeSlotsAsync(id, culture);
 
             if (items is null || !items.Any())
                 return TypedResults.NotFound();
