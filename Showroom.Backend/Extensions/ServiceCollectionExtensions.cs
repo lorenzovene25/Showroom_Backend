@@ -25,6 +25,25 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    // CORS Configuration
+    public static IServiceCollection AddCorsConfig(this IServiceCollection services, IConfiguration configuration)
+    {
+        var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:3000", "http://localhost:5173" };
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowFrontend", policy =>
+            {
+                policy.WithOrigins(allowedOrigins)
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials();
+            });
+        });
+
+        return services;
+    }
+
     // Rate Limiter
     public static IServiceCollection AddRateLimitingConfig(this IServiceCollection services)
     {

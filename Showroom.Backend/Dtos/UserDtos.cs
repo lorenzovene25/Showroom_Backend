@@ -9,8 +9,6 @@ public class UserDto
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public bool IsAdmin { get; set; }
-    public int? CartId { get; set; }
-    public DateTime CreatedAt { get; set; }
 }
 
 public class CreateUserDto
