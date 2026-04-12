@@ -153,17 +153,34 @@ public class UserService : IUserService
                 t.exhibition_id AS ExhibitionId, 
                 COALESCE(et.title, en.title) AS ExhibitionTitle,
                 t.tier_id       AS TierId, 
+                COALESCE(ttt.name, ttten.name) AS TierName,
+                tt.price        AS TierPrice,    -- Corretto l'alias per matchare il tuo DTO e non stampare 0!
                 t.user_id       AS UserId, 
                 t.visit_date    AS VisitDate,
                 t.time_slot_id  AS TimeSlotId, 
+                ts.start_time   AS SlotStartTime, -- Recupero l'orario di inizio
+                ts.end_time     AS SlotEndTime,   -- Recupero l'orario di fine
                 t.purchased_at  AS PurchasedAt
             FROM tickets t
+            
+            -- Join per recuperare il prezzo base
+            INNER JOIN ticket_tiers tt ON tt.id = t.tier_id
+            
+            -- Join per recuperare gli orari dallo slot
+            INNER JOIN exhibition_time_slots ts ON ts.id = t.time_slot_id
+            
+            -- Join per il nome della Mostra
             LEFT JOIN exhibitions e ON e.id = t.exhibition_id
-            LEFT JOIN exhibition_translations et ON et.exhibition_id = e.id
+            LEFT JOIN exhibition_translations et ON et.exhibition_id = e.id AND et.language_code = @Culture
             LEFT JOIN exhibition_translations en ON en.exhibition_id = e.id AND en.language_code = 'en'
-            WHERE t.user_id = @UserId AND et.language_code = @Culture 
-            ORDER BY t.visit_date DESC
-            """;
+            
+            -- Join per il nome tradotto del Tipo di Biglietto (Tier)
+            LEFT JOIN ticket_tier_translations ttt ON ttt.ticket_tier_id = t.tier_id AND ttt.language_code = @Culture
+            LEFT JOIN ticket_tier_translations ttten ON ttten.ticket_tier_id = t.tier_id AND ttten.language_code = 'en'
+            
+            WHERE t.user_id = @UserId
+        """;
+
         return await conn.QueryAsync<TicketDto>(query, new { UserId = id, Culture = culture });
     }
 

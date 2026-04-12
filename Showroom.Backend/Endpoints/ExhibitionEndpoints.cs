@@ -2,6 +2,7 @@
 using Showroom.Backend.Dtos;
 using Showroom.Backend.Services;
 using Showroom.Models;
+using System.Text.RegularExpressions;
 
 namespace PW.WebApi.Endpoints
 {
@@ -28,6 +29,27 @@ namespace PW.WebApi.Endpoints
             group.MapGet("{id:int}/artworks", GetExhibitionArtworksByIdAsync)
                  .WithName("GetExhibitionArtworksById")
                  .WithDescription("Get exhibition artworks by ID");
+
+            group.MapGet("tiers", GetTicketTiers)
+                 .WithName("GetTicketTiers")
+                 .WithDescription("Get ticket tiers for exhibitions");
+        }
+
+        private static async Task<Results<Ok<IEnumerable<TicketTierDto>>, NotFound>> GetTicketTiers(ITicketService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")
+        {
+            var logger = loggerFactory.CreateLogger("ExhibitionEndpoints");
+            logger.LogInformation("Fetching ticket tiers - Culture: {Culture}", culture);
+
+            var items = await service.GetAllTicketTiersAsync(culture);
+
+            if (items is null || !items.Any())
+            {
+                logger.LogWarning("No ticket tiers found - Culture: {Culture}", culture);
+                return TypedResults.NotFound();
+            }
+
+            logger.LogInformation("Successfully fetched {Count} ticket tiers - Culture: {Culture}", items.Count(), culture);
+            return TypedResults.Ok(items);
         }
 
         private static async Task<Results<Ok<IEnumerable<ArtworkDto>>, NotFound>> GetExhibitionArtworksByIdAsync(int id, IExhibitionService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")

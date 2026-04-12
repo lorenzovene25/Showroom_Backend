@@ -232,6 +232,7 @@ public static class UserEndpoints
             logger.LogWarning("Access denied to cart - Requested user ID: {RequestedUserId}, Token user ID: {TokenUserId}, IsAdmin: {IsAdmin}", userId, tokenIdString, isAdmin);
             return TypedResults.Forbid();
         }
+
         var result = await service.AddItemAsync(userId, request, culture);
         if (result is null)
         {

@@ -10,5 +10,6 @@ namespace Showroom.Backend.Services
         Task<IEnumerable<TicketDto>> GetByExhibitionAsync(int exhibitionId, string culture = "en");
         Task<TicketDto?> GetByIdAsync(int id, string culture = "en");
         Task<IEnumerable<TicketDto>> GetByUserAsync(int userId, string culture = "en");
+        Task<IEnumerable<TicketTierDto>> GetAllTicketTiersAsync(string culture = "en");
     }
 }

@@ -97,4 +97,22 @@ public class TicketService : ITicketService
         return await conn.ExecuteAsync(
             "DELETE FROM tickets WHERE id = @Id", new { Id = id }) > 0;
     }
+
+    public async Task<IEnumerable<TicketTierDto>> GetAllTicketTiersAsync(string culture = "en")
+    {
+        using var conn = Conn();
+        const string query = """
+            SELECT 
+                tt.id               AS Id,
+                tt.type             AS Type,
+                tt.price            AS Price,
+                ttt.name            AS Name,
+                ttt.description     AS Description
+            FROM public.ticket_tiers tt
+            JOIN public.ticket_tier_translations ttt ON tt.id = ttt.ticket_tier_id 
+            WHERE ttt.language_code = @Culture
+            """;
+        return await conn.QueryAsync<TicketTierDto>(query,
+            new { Culture = culture });
+    }
 }
