@@ -17,7 +17,7 @@ public class TokenBlacklistMiddleware
         _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext context, ITokenBlacklistService blacklistService)
+    public async Task InvokeAsync(HttpContext context, ITokenBlacklistService blacklistService, ITokenParsingService tokenParsingService)
     {
         // Estrae il token dal cookie o dall'header Authorization
         var token = ExtractToken(context);
@@ -31,6 +31,14 @@ public class TokenBlacklistMiddleware
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 await context.Response.WriteAsJsonAsync(new { message = "Token revocato. Effettua il login di nuovo." });
                 return;
+            }
+
+            // Log della scadenza del token per debug
+            var tokenExpiration = tokenParsingService.GetTokenExpiration(token);
+            if (tokenExpiration.HasValue)
+            {
+                var timeRemaining = tokenExpiration.Value - DateTime.UtcNow;
+                _logger.LogDebug("Token valido. Scade in {TimeRemaining} minuti", timeRemaining.TotalMinutes);
             }
         }
 

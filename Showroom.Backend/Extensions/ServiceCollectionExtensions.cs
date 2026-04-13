@@ -25,6 +25,9 @@ public static class ServiceCollectionExtensions
         // Servizio per la blacklist dei token JWT
         services.AddSingleton<ITokenBlacklistService, TokenBlacklistService>();
 
+        // Servizio per il parsing dei token JWT
+        services.AddScoped<ITokenParsingService, TokenParsingService>();
+
         return services;
     }
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Showroom.Backend.Dtos;
 using Showroom.Backend.Services;
+using Showroom.Backend.Utilities;
 
 namespace Showroom.Backend.Endpoints;
 
@@ -32,7 +33,7 @@ public static class AuthEndpoints
             .RequireAuthorization();
     }
 
-    public static async Task<Results<Ok<UserDto>, BadRequest<string>>> LoginUser(LoginUserDto request, IUserService service, ILoggerFactory loggerFactory, HttpContext context)
+    public static async Task<Results<Ok<UserDto>, BadRequest<string>>> LoginUser(LoginUserDto request, IUserService service, ILoggerFactory loggerFactory, HttpContext context, IConfiguration configuration)
     {
         var logger = loggerFactory.CreateLogger("AuthEndpoints");
         logger.LogInformation("Login attempted");
@@ -51,33 +52,31 @@ public static class AuthEndpoints
             return TypedResults.BadRequest("Utente non trovato");
         }
 
-        var cookieOptions = new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTimeOffset.UtcNow.AddHours(2)
-        };
+        // Ottiene la durata di scadenza del token dalla configurazione
+        var expiryInMinutes = TokenExpirationHelper.GetTokenExpiryInMinutes(configuration);
+        var cookieOptions = CookieOptionsFactory.CreateJwtCookieOptions(expiryInMinutes);
 
         context.Response.Cookies.Append("jwt_token", token, cookieOptions);
-        logger.LogInformation("Login successful for email: {Email} - User ID: {UserId}", request.Email, user.Id);
+        logger.LogInformation("Login successful for email: {Email} - User ID: {UserId}. Cookie expires in {Minutes} minutes", request.Email, user.Id, expiryInMinutes);
 
         return TypedResults.Ok(user);
     }
 
-    public static async Task<Results<Ok<string>, BadRequest>> LogoutUser(ILoggerFactory loggerFactory, HttpContext context, ITokenBlacklistService blacklistService)
+    public static async Task<Results<Ok<string>, BadRequest>> LogoutUser(ILoggerFactory loggerFactory, HttpContext context, ITokenBlacklistService blacklistService, IConfiguration configuration)
     {
         var logger = loggerFactory.CreateLogger("AuthEndpoints");
         logger.LogInformation("Logout attempt");
 
+        // Ottiene la durata di scadenza del token dalla configurazione
+        var expiryInMinutes = TokenExpirationHelper.GetTokenExpiryInMinutes(configuration);
+        var blacklistExpirationTime = TokenExpirationHelper.CalculateBlacklistExpiration(expiryInMinutes);
+
         // Estrae il token dal cookie
         if (context.Request.Cookies.TryGetValue("jwt_token", out var token))
         {
-            // Aggiunge il token alla blacklist con il tempo di scadenza
-            // Di solito i token hanno una scadenza di 2 ore come visto nel login
-            var expirationTime = DateTime.UtcNow.AddHours(2);
-            await blacklistService.AddTokenAsync(token, expirationTime);
-            logger.LogInformation("Token aggiunto alla blacklist");
+            // Aggiunge il token alla blacklist con il tempo di scadenza allineato alla configurazione
+            await blacklistService.AddTokenAsync(token, blacklistExpirationTime);
+            logger.LogInformation("Token aggiunto alla blacklist. Expires: {ExpirationTime}", blacklistExpirationTime);
         }
         else
         {
@@ -86,9 +85,8 @@ public static class AuthEndpoints
             if (authHeader?.StartsWith("Bearer ") == true)
             {
                 var bearerToken = authHeader.Substring("Bearer ".Length).Trim();
-                var expirationTime = DateTime.UtcNow.AddHours(2);
-                await blacklistService.AddTokenAsync(bearerToken, expirationTime);
-                logger.LogInformation("Token da Authorization header aggiunto alla blacklist");
+                await blacklistService.AddTokenAsync(bearerToken, blacklistExpirationTime);
+                logger.LogInformation("Token da Authorization header aggiunto alla blacklist. Expires: {ExpirationTime}", blacklistExpirationTime);
             }
         }
 
@@ -97,7 +95,7 @@ public static class AuthEndpoints
         return TypedResults.Ok("Logout effettuato");
     }
 
-    public static async Task<Results<Ok<UserDto>, BadRequest<string>>> RegisterUser(CreateUserDto request, IUserService service, ILoggerFactory loggerFactory, HttpContext context)
+    public static async Task<Results<Ok<UserDto>, BadRequest<string>>> RegisterUser(CreateUserDto request, IUserService service, ILoggerFactory loggerFactory, HttpContext context, IConfiguration configuration)
     {
         var logger = loggerFactory.CreateLogger("AuthEndpoints");
         logger.LogInformation("Registration attempt...");
@@ -121,16 +119,12 @@ public static class AuthEndpoints
 
         if (token is not null)
         {
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTimeOffset.UtcNow.AddHours(2)
-            };
+            // Ottiene la durata di scadenza del token dalla configurazione
+            var expiryInMinutes = TokenExpirationHelper.GetTokenExpiryInMinutes(configuration);
+            var cookieOptions = CookieOptionsFactory.CreateJwtCookieOptions(expiryInMinutes);
 
             context.Response.Cookies.Append("jwt_token", token, cookieOptions);
-            logger.LogInformation("Registration and auto-login successful for email: {Email} - User ID: {UserId}", request.Email, user.Id);
+            logger.LogInformation("Registration and auto-login successful for email: {Email} - User ID: {UserId}. Cookie expires in {Minutes} minutes", request.Email, user.Id, expiryInMinutes);
         }
         else
         {
