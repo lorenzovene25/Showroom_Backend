@@ -19,7 +19,6 @@ public class TokenBlacklistMiddleware
 
     public async Task InvokeAsync(HttpContext context, ITokenBlacklistService blacklistService, ITokenParsingService tokenParsingService)
     {
-        // Estrae il token dal cookie o dall'header Authorization
         var token = ExtractToken(context);
 
         if (!string.IsNullOrWhiteSpace(token))
