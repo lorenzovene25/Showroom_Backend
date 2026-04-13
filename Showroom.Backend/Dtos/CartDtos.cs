@@ -4,12 +4,38 @@
 //  CART
 // ══════════════════════════════════════════════════════════════════
 
-public record CartDto(
-    int Id, DateTime CreatedAt, IEnumerable<CartItemDto> Items);
+public class CartDto
+{
+    public int Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public IEnumerable<CartItemDto> Items { get; set; } = new List<CartItemDto>();
+}
 
-public record CartItemDto(
-    int Id, int CartId, int SouvenirId, string? SouvenirName,
-    decimal SouvenirPrice, int Quantity);
+public class CartItemDto
+{
+    public int Id { get; set; }
+    public int CartId { get; set; }
+    public int SouvenirId { get; set; }
+    public string? SouvenirName { get; set; }
+    public decimal SouvenirPrice { get; set; }
+    public int Quantity { get; set; }
+}
 
-public record AddCartItemDto(int SouvenirId, int Quantity = 1);
-public record PatchCartItemDto(int Quantity);
+public class AddCartItemDto
+{
+    public int SouvenirId { get; set; }
+    public int Quantity { get; set; } = 1;
+}
+
+public class PatchCartItemDto
+{
+    public int Quantity { get; set; }
+}
+
+public class CheckoutItemDto
+{
+    public int CartId { get; set; }
+    public int SouvenirId { get; set; }
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
+}

@@ -1,29 +1,54 @@
 ﻿namespace Showroom.Backend.Dtos;
 
-// ══════════════════════════════════════════════════════════════════
-//  EXHIBITION
-// ══════════════════════════════════════════════════════════════════
+public class ExhibitionDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
+    public string? MapsUrl { get; set; } = null;
+    public string Status { get; set; } = string.Empty;
+    public DateOnly StartDate { get; set; }
+    public DateOnly EndDate { get; set; }
+    public string? ImageUrl { get; set; } = null;
+    public string? Title { get; set; } = null;
+    public string? Description { get; set; } = null;
+}
+public class CreateExhibitionDto
+{
+    public string Name { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public DateOnly StartDate { get; set; }
+    public DateOnly EndDate { get; set; }
+    public string? MapsUrl { get; set; } = null;
+    public string? ImageUrl { get; set; } = null;
+    public string? Title { get; set; } = null;
+    public string Culture { get; set; } = "en";
+    public string? Description { get; set; } = null;
+}
 
-public record ExhibitionDto(
-    int Id, string Name, string Location, string? MapsUrl,
-    string Status, DateOnly StartDate, DateOnly EndDate, string? ImageUrl,
-    // from exhibition_translations (culture-aware)
-    string? Title, string? Description);
+public class UpdateExhibitionDto
+{
+    public string Name { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public DateOnly StartDate { get; set; }
+    public DateOnly EndDate { get; set; }
+    public string? MapsUrl { get; set; } = null;
+    public string? ImageUrl { get; set; } = null;
+    public string? Title { get; set; } = null;
+    public string? Description { get; set; } = null;
+}
 
-public record CreateExhibitionDto(
-    string Name, string Location, string Status,
-    DateOnly StartDate, DateOnly EndDate,
-    string? MapsUrl = null, string? ImageUrl = null,
-    string Culture = "en",
-    string? Title = null, string? Description = null);
-
-public record UpdateExhibitionDto(
-    string Name, string Location, string Status,
-    DateOnly StartDate, DateOnly EndDate,
-    string? MapsUrl = null, string? ImageUrl = null,
-    string? Title = null, string? Description = null);
-
-public record PatchExhibitionDto(
-    string? Name = null, string? Location = null, string? MapsUrl = null,
-    string? Status = null, DateOnly? StartDate = null, DateOnly? EndDate = null,
-    string? ImageUrl = null, string? Title = null, string? Description = null);
+public class PatchExhibitionDto
+{
+    public string? Name { get; set; } = null;
+    public string? Location { get; set; } = null;
+    public string? MapsUrl { get; set; } = null;
+    public string? Status { get; set; } = null;
+    public DateOnly? StartDate { get; set; } = null;
+    public DateOnly? EndDate { get; set; } = null;
+    public string? ImageUrl { get; set; } = null;
+    public string? Title { get; set; } = null;
+    public string? Description { get; set; } = null;
+}

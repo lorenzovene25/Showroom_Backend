@@ -1,21 +1,35 @@
 ﻿namespace Showroom.Backend.Dtos;
+public class ExhibitionTimeSlotDto
+{
+    public int Id { get; set; }
+    public int ExhibitionId { get; set; }
+    public int[] DaysOfWeek { get; set; } = [];
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
+    public int MaxCapacity { get; set; }
+}
 
-// ══════════════════════════════════════════════════════════════════
-//  EXHIBITION TIME SLOT
-// ══════════════════════════════════════════════════════════════════
+public class CreateExhibitionTimeSlotDto
+{
+    public int ExhibitionId { get; set; }
+    public int[] DaysOfWeek { get; set; } = [];
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
+    public int MaxCapacity { get; set; } = 50;
+}
 
-public record ExhibitionTimeSlotDto(
-    int Id, int ExhibitionId, int[] DaysOfWeek,
-    TimeOnly StartTime, TimeOnly EndTime, int MaxCapacity);
+public class UpdateExhibitionTimeSlotDto
+{
+    public int[] DaysOfWeek { get; set; } = [];
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
+    public int MaxCapacity { get; set; }
+}
 
-public record CreateExhibitionTimeSlotDto(
-    int ExhibitionId, int[] DaysOfWeek,
-    TimeOnly StartTime, TimeOnly EndTime, int MaxCapacity = 50);
-
-public record UpdateExhibitionTimeSlotDto(
-    int[] DaysOfWeek, TimeOnly StartTime,
-    TimeOnly EndTime, int MaxCapacity);
-
-public record PatchExhibitionTimeSlotDto(
-    int[]? DaysOfWeek = null, TimeOnly? StartTime = null,
-    TimeOnly? EndTime = null, int? MaxCapacity = null);
+public class PatchExhibitionTimeSlotDto
+{
+    public int[]? DaysOfWeek { get; set; }
+    public TimeOnly? StartTime { get; set; }
+    public TimeOnly? EndTime { get; set; }
+    public int? MaxCapacity { get; set; }
+}

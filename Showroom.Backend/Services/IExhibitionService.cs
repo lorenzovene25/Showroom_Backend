@@ -11,4 +11,6 @@ public interface IExhibitionService
     Task<ExhibitionDto?> UpdateAsync(int id, UpdateExhibitionDto dto, string culture = "en");
     Task<ExhibitionDto?> PatchAsync(int id, PatchExhibitionDto dto, string culture = "en");
     Task<bool> DeleteAsync(int id);
+    Task<IEnumerable<ArtworkDto>> GetAllArtworksAsync(int exhibitionId, string culture = "en");
+    Task<IEnumerable<ExhibitionTimeSlotDto>> GetAllTimeSlotsAsync(int exhibitionId, string culture = "en");
 }

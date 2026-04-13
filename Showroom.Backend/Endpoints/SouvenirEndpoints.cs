@@ -1,73 +1,53 @@
-﻿using Showroom.Backend.Dtos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Showroom.Backend.Dtos;
 using Showroom.Backend.Services;
 
 namespace Showroom.Backend.Endpoints;
 
-
-// ══════════════════════════════════════════════════════════════════
-//  SOUVENIR
-// ══════════════════════════════════════════════════════════════════
 public static class SouvenirEndpoints
 {
-
-    public static void MapSouvenirEndpoints(this IEndpointRouteBuilder app)
+    public static void MapSouvenirEndpoints(this IEndpointRouteBuilder route)
     {
+        var group = route.MapGroup("/api/souvenirs")
+                 .WithTags("Souvenirs")
+                 .RequireRateLimiting("RateLimit");
+
         // GET /souvenirs?culture=en
-        app.MapGet("/souvenirs", async (ISouvenirService svc, string culture = "en") =>
-        {
-            var result = await svc.GetAllAsync(culture);
-            return Results.Ok(result);
-        })
+        group.MapGet("", GetSouvenirsAsync)
         .WithName("GetSouvenirs")
-        .WithTags("Souvenirs")
-        .WithSummary("Restituisce tutti i souvenir")
-        .Produces<IEnumerable<SouvenirDto>>();
+        .WithSummary("Restituisce tutti i souvenir");
 
         // GET /souvenirs/{id}?culture=en
-        app.MapGet("/souvenirs/{id:int}", async (int id, ISouvenirService svc, string culture = "en") =>
-        {
-            var result = await svc.GetByIdAsync(id, culture);
-            return result is null ? Results.NotFound() : Results.Ok(result);
-        })
+        group.MapGet("{id:int}", GetSouvenirsByIdAsync)
         .WithName("GetSouvenirById")
-        .WithTags("Souvenirs")
-        .WithSummary("Restituisce un souvenir per ID")
-        .Produces<SouvenirDto>()
-        .ProducesProblem(404);
+        .WithSummary("Restituisce un souvenir per ID");
+    }
 
-        // POST /souvenirs
-        app.MapPost("/souvenirs", async (CreateSouvenirDto dto, ISouvenirService svc) =>
-        {
-            var created = await svc.CreateAsync(dto);
-            return Results.Created($"/souvenirs/{created.Id}", created);
-        })
-        .WithName("CreateSouvenir")
-        .WithTags("Souvenirs")
-        .WithSummary("Crea un nuovo souvenir")
-        .Produces<SouvenirDto>(201);
+    public static async Task<Results<Ok<IEnumerable<SouvenirDto>>, NotFound>> GetSouvenirsAsync(ISouvenirService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")
+    {
+        var logger = loggerFactory.CreateLogger("SouvenirEndpoints");
+        logger.LogInformation("Fetching all souvenirs - Culture: {Culture}", culture);
 
-        // PATCH /souvenirs/{id}?culture=en
-        app.MapPatch("/souvenirs/{id:int}", async (int id, PatchSouvenirDto dto, ISouvenirService svc, string culture = "en") =>
-        {
-            var result = await svc.PatchAsync(id, dto, culture);
-            return result is null ? Results.NotFound() : Results.Ok(result);
-        })
-        .WithName("PatchSouvenir")
-        .WithTags("Souvenirs")
-        .WithSummary("Aggiorna parzialmente un souvenir")
-        .Produces<SouvenirDto>()
-        .ProducesProblem(404);
+        var result = await service.GetAllAsync(culture);
 
-        // DELETE /souvenirs/{id}
-        app.MapDelete("/souvenirs/{id:int}", async (int id, ISouvenirService svc) =>
+        logger.LogInformation("Successfully fetched {Count} souvenirs - Culture: {Culture}", result?.Count() ?? 0, culture);
+        return TypedResults.Ok(result);
+    }
+
+    public static async Task<Results<Ok<SouvenirDto>, NotFound>> GetSouvenirsByIdAsync(int id, ISouvenirService service, ILoggerFactory loggerFactory, HttpContext context, string culture = "en")
+    {
+        var logger = loggerFactory.CreateLogger("SouvenirEndpoints");
+        logger.LogInformation("Fetching souvenir by ID: {SouvenirId} - Culture: {Culture}", id, culture);
+
+        var result = await service.GetByIdAsync(id, culture);
+
+        if (result is null)
         {
-            var deleted = await svc.DeleteAsync(id);
-            return deleted ? Results.NoContent() : Results.NotFound();
-        })
-        .WithName("DeleteSouvenir")
-        .WithTags("Souvenirs")
-        .WithSummary("Elimina un souvenir")
-        .Produces(204)
-        .ProducesProblem(404);
+            logger.LogWarning("Souvenir not found - ID: {SouvenirId}", id);
+            return TypedResults.NotFound();
+        }
+
+        logger.LogInformation("Souvenir found - ID: {SouvenirId}", id);
+        return TypedResults.Ok(result);
     }
 }

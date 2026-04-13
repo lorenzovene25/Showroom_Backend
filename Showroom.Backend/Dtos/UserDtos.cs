@@ -1,23 +1,106 @@
-﻿namespace Showroom.Backend.Dtos;
+﻿using FluentValidation;
 
-// ══════════════════════════════════════════════════════════════════
-//  USER
-// ══════════════════════════════════════════════════════════════════
+namespace Showroom.Backend.Dtos;
 
-public record UserDto(
-    int Id, string FirstName, string LastName, string Email,
-    bool IsAdmin, int? CartId, DateTime CreatedAt);
+public class UserDto
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public bool IsAdmin { get; set; }
+}
 
-// PasswordHash is expected pre-hashed by the caller (controller / auth layer)
-public record CreateUserDto(
-    string FirstName, string LastName,
-    string Email, string PasswordHash,
-    bool IsAdmin = false);
+public class CreateUserDto
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public bool IsAdmin { get; set; } = false;
+}
 
-public record UpdateUserDto(
-    string FirstName, string LastName, string Email,
-    bool IsAdmin, string? PasswordHash = null);
+public class UpdateUserDto
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public bool IsAdmin { get; set; }
+    public string? PasswordHash { get; set; }
+}
 
-public record PatchUserDto(
-    string? FirstName = null, string? LastName = null,
-    string? Email = null, bool? IsAdmin = null, string? PasswordHash = null);
+public class PatchUserDto
+{
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? Email { get; set; }
+    public bool? IsAdmin { get; set; }
+    public string? PasswordHash { get; set; }
+}
+
+public class ChangePasswordUserDto
+{
+    public string? Email { get; set; }
+    public string? OldPassword { get; set; }
+    public string? NewPassword { get; set; }
+}
+
+public class LoginUserDto
+{
+    public string? Email { get; set; }
+    public string? Password { get; set; }
+}
+
+// validators
+
+public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
+{
+    public CreateUserDtoValidator()
+    {
+        RuleFor(x => x.FirstName).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.LastName).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.Password).NotEmpty();
+    }
+}
+
+public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
+{
+    public UpdateUserDtoValidator()
+    {
+        RuleFor(x => x.FirstName).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.LastName).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.PasswordHash).NotEmpty().When(x => x.PasswordHash != null);
+    }
+}
+
+public class PatchUserDtoValidator : AbstractValidator<PatchUserDto>
+{
+    public PatchUserDtoValidator()
+    {
+        RuleFor(x => x.FirstName).NotEmpty().MaximumLength(100).When(x => x.FirstName != null);
+        RuleFor(x => x.LastName).NotEmpty().MaximumLength(100).When(x => x.LastName != null);
+        RuleFor(x => x.Email).NotEmpty().EmailAddress().When(x => x.Email != null);
+        RuleFor(x => x.PasswordHash).NotEmpty().When(x => x.PasswordHash != null);
+    }
+}
+
+public class ChangePasswordUserDtoValidator : AbstractValidator<ChangePasswordUserDto>
+{
+    public ChangePasswordUserDtoValidator()
+    {
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.OldPassword).NotEmpty();
+        RuleFor(x => x.NewPassword).NotEmpty().MinimumLength(6).NotEqual(x => x.OldPassword);
+    }
+}
+
+public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
+{
+    public LoginUserDtoValidator()
+    {
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.Password).NotEmpty();
+    }
+}

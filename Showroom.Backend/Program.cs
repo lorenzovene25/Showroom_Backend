@@ -1,24 +1,29 @@
-using Showroom.Backend;
-using Showroom.Backend.Services;
-using Showroom.Backend.Endpoints;
+using Microsoft.AspNetCore.HttpOverrides;
+using Showroom.Backend.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
-builder.Services.AddScoped<IArtworkService, ArtworkService>();
-builder.Services.AddScoped<IExhibitionService,ExhibitionService>();
-builder.Services.AddScoped<ISouvenirService,SouvenirService>();
-builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<ITicketService,TicketService>();
-builder.Services.AddScoped<ITicketTierService, TicketTierService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-
-
+builder.Services.AddRateLimitingConfig(); // rate limiter
+builder.Services.AddCorsConfig(builder.Configuration); // CORS configuration
+builder.Services.AddJwtAuthentication(builder.Configuration); // JWT
+builder.Services.AddApplicationServices(); // injection degli IService
 
 var app = builder.Build();
+
+// per mandare richieste anche se in http con nginx
+// normalmente le fa in https ma se viene dal reverse proxy le manda lo stesso
+var forwardedHeadersOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+// Svuotiamo le reti "conosciute" per fidarci del proxy Docker
+forwardedHeadersOptions.KnownNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+
+app.UseForwardedHeaders(forwardedHeadersOptions);
+
+app.UseGlobalExceptionHandler(); // gestione globale degli errori
 
 if (app.Environment.IsDevelopment())
 {
@@ -29,12 +34,15 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseCors("AllowFrontend"); // CORS middleware
+
 app.UseHttpsRedirection();
 
-app.MapArtworkEndpoints();
-app.MapExhibitionEndpoints();
-app.MapSouvenirEndpoints();
-app.MapUserEndpoints();
-app.MapTicketEndpoints();
+app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapApplicationEndpoints(); // Mappa gli endpoint
 
 app.Run();

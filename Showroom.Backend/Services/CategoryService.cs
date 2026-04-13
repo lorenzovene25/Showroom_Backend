@@ -13,56 +13,100 @@ public class CategoryService : ICategoryService
 
     private NpgsqlConnection Conn() => new(_connectionString);
 
-    // GET ALL
     public async Task<IEnumerable<CategoryDto>> GetAllAsync()
     {
         using var conn = Conn();
-        return await conn.QueryAsync<CategoryDto>(
-            "SELECT id AS Id, slug AS Slug, name AS Name, description AS Description FROM categories ORDER BY name");
+        const string query = """
+            SELECT 
+                c.id          AS Id, 
+                c.slug        AS Slug, 
+                c.name        AS Name, 
+                c.description AS Description
+            FROM categories c
+            ORDER BY c.name
+            """;
+        return await conn.QueryAsync<CategoryDto>(query);
     }
 
-    // GET BY ID
     public async Task<CategoryDto?> GetByIdAsync(int id)
     {
         using var conn = Conn();
-        return await conn.QuerySingleOrDefaultAsync<CategoryDto>(
-            "SELECT id AS Id, slug AS Slug, name AS Name, description AS Description FROM categories WHERE id = @Id", new { Id = id });
+        const string query = """
+            SELECT 
+                id          AS Id, 
+                slug        AS Slug, 
+                name        AS Name, 
+                description AS Description 
+            FROM categories 
+            WHERE id = @Id
+            """;
+        return await conn.QuerySingleOrDefaultAsync<CategoryDto>(query, new { Id = id });
     }
 
-    // GET BY SLUG
-    public async Task<CategoryDto?> GetBySlugAsync(string slug)
+    public async Task<CategoryDto?> GetBySlugAsync(string slug, string culture = "en")
     {
         using var conn = Conn();
-        return await conn.QuerySingleOrDefaultAsync<CategoryDto>(
-            "SELECT id AS Id, slug AS Slug, name AS Name, description AS Description FROM categories WHERE slug = @Slug", new { Slug = slug });
+        const string query = """
+            SELECT 
+                id          AS Id, 
+                slug        AS Slug, 
+                name        AS Name, 
+                description AS Description 
+            FROM categories 
+            WHERE slug = @Slug
+            """;
+        return await conn.QuerySingleOrDefaultAsync<CategoryDto>(query, new { Slug = slug });
     }
 
-    // POST
+    public async Task<IEnumerable<SouvenirDto>> GetSouvenirsByCategoryIdAsync(int id, string culture = "en")
+    {
+        using var conn = Conn();
+        const string query = """
+            SELECT 
+                s.id                      AS Id,
+                s.category_id             AS CategoryId,
+                s.price                   AS Price,
+                s.image_url               AS ImageUrl,
+                s.in_stock                AS InStock,
+                COALESCE(t.name, en.name) AS Name,
+                COALESCE(t.short_description, en.short_description) AS ShortDescription,
+                COALESCE(t.full_description, en.full_description) AS FullDescription
+            FROM souvenirs s
+            LEFT JOIN souvenirs_translations t  ON t.souvenir_id = s.id AND t.language_code = @Culture
+            LEFT JOIN souvenirs_translations en ON en.souvenir_id = s.id AND en.language_code = 'en'
+            WHERE s.category_id = @Id
+            ORDER BY Name
+            """;
+        return await conn.QueryAsync<SouvenirDto>(query, new { Id = id, Culture = culture });
+    }
+
     public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
     {
         using var conn = Conn();
-        int id = await conn.ExecuteScalarAsync<int>("""
+        const string query = """
             INSERT INTO categories (slug, name, description)
             VALUES (@Slug, @Name, @Description)
-            RETURNING id AS Id;
-            """, dto);
+            RETURNING id
+            """;
+        int id = await conn.ExecuteScalarAsync<int>(query, dto);
         return (await GetByIdAsync(id))!;
     }
 
-    // PUT
-    public async Task<CategoryDto?> UpdateAsync(int id, UpdateCategoryDto dto)
+    public async Task<CategoryDto?> UpdateAsync(int id, UpdateCategoryDto dto, string culture = "en")
     {
         using var conn = Conn();
-        int rows = await conn.ExecuteAsync("""
-            UPDATE categories
-            SET slug = @Slug, name = @Name, description = @Description
-            WHERE id = @Id;
-            """, new { Id = id, dto.Slug, dto.Name, dto.Description });
+        const string query = """
+            UPDATE categories 
+            SET slug = @Slug, 
+                name = @Name, 
+                description = @Description 
+            WHERE id = @Id
+            """;
+        int rows = await conn.ExecuteAsync(query, new { Id = id, dto.Slug, dto.Name, dto.Description });
         return rows == 0 ? null : await GetByIdAsync(id);
     }
 
-    // PATCH
-    public async Task<CategoryDto?> PatchAsync(int id, PatchCategoryDto dto)
+    public async Task<CategoryDto?> PatchAsync(int id, PatchCategoryDto dto, string culture = "en")
     {
         using var conn = Conn();
         var sets = new List<string>();
@@ -74,16 +118,22 @@ public class CategoryService : ICategoryService
 
         if (sets.Count == 0) return await GetByIdAsync(id);
 
-        int rows = await conn.ExecuteAsync(
-            $"UPDATE categories SET {string.Join(", ", sets)} WHERE id = @Id", p);
+        string query = $"""
+            UPDATE categories 
+            SET {string.Join(", ", sets)} 
+            WHERE id = @Id
+            """;
+        int rows = await conn.ExecuteAsync(query, p);
         return rows == 0 ? null : await GetByIdAsync(id);
     }
 
-    // DELETE
     public async Task<bool> DeleteAsync(int id)
     {
         using var conn = Conn();
-        return await conn.ExecuteAsync(
-            "DELETE FROM categories WHERE id = @Id", new { Id = id }) > 0;
+        const string query = """
+            DELETE FROM categories 
+            WHERE id = @Id
+            """;
+        return await conn.ExecuteAsync(query, new { Id = id }) > 0;
     }
 }
