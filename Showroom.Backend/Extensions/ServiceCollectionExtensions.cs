@@ -22,6 +22,9 @@ public static class ServiceCollectionExtensions
         //provider del token JWT
         services.AddScoped<IJwtProvider, JwtProvider>();
 
+        // Servizio per la blacklist dei token JWT
+        services.AddSingleton<ITokenBlacklistService, TokenBlacklistService>();
+
         return services;
     }
 
@@ -52,6 +55,17 @@ public static class ServiceCollectionExtensions
             options.AddFixedWindowLimiter("RateLimit", limiterOptions =>
             {
                 limiterOptions.PermitLimit = 100;
+                limiterOptions.Window = TimeSpan.FromMinutes(1);
+                limiterOptions.QueueLimit = 0;
+            });
+            options.RejectionStatusCode = 429;
+        });
+
+        services.AddRateLimiter(options =>
+        {
+            options.AddFixedWindowLimiter("AuthLimit", limiterOptions =>
+            {
+                limiterOptions.PermitLimit = 5;
                 limiterOptions.Window = TimeSpan.FromMinutes(1);
                 limiterOptions.QueueLimit = 0;
             });

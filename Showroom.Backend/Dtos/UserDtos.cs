@@ -92,7 +92,11 @@ public class ChangePasswordUserDtoValidator : AbstractValidator<ChangePasswordUs
     {
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
         RuleFor(x => x.OldPassword).NotEmpty();
-        RuleFor(x => x.NewPassword).NotEmpty().MinimumLength(6).NotEqual(x => x.OldPassword);
+        RuleFor(x => x.NewPassword).NotEmpty().MinimumLength(8).NotEqual(x => x.OldPassword)
+        .Matches(@"[A-Z]").WithMessage("La password deve contenere almeno una lettera maiuscola.")
+        .Matches(@"[a-z]").WithMessage("La password deve contenere almeno una lettera minuscola.")
+        .Matches(@"\d").WithMessage("La password deve contenere almeno un numero.")
+        .Matches(@"[\W_]").WithMessage("La password deve contenere almeno un carattere speciale.");
     }
 }
 

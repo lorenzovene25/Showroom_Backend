@@ -271,22 +271,31 @@ public static class UserEndpoints
     int userId,
     [FromQuery] bool paymentSuccess,
     ICartService service,
-    ClaimsPrincipal userPrincipal)
+    ClaimsPrincipal userPrincipal,
+    ILoggerFactory loggerFactory)
     {
-        // Il solito controllo di sicurezza: chi sta chiamando la rotta?
+        var logger = loggerFactory.CreateLogger("UserEndpoints");
+        logger.LogInformation("Checkout attempt for user ID: {UserId}, Payment Success: {PaymentSuccess}", userId, paymentSuccess);
+
         var tokenIdString = userPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value
                          ?? userPrincipal.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
         if (tokenIdString != userId.ToString())
         {
+            logger.LogWarning("Access denied to checkout - Requested user ID: {RequestedUserId}, Token user ID: {TokenUserId}", userId, tokenIdString);
             return TypedResults.Forbid();
         }
 
-        // Passiamo il flag del frontend al service
         var result = await service.CheckoutAsync(userId, paymentSuccess);
 
-        // Se restituisce false, il carrello era vuoto
-        return result ? TypedResults.Ok() : TypedResults.BadRequest();
+        if (!result)
+        {
+            logger.LogWarning("Checkout failed for user ID: {UserId}", userId);
+            return TypedResults.BadRequest();
+        }
+
+        logger.LogInformation("Checkout successful for user ID: {UserId}", userId);
+        return TypedResults.Ok();
     }
 
 }

@@ -41,7 +41,7 @@ public static class AuthExtensions
                     if (context.Request.Cookies.TryGetValue("jwt_token", out var token))
                     {
                         context.Token = token;
-                        Console.WriteLine($"[AUTH] Cookie 'jwt_token' trovato! Token inizia con: {token.Substring(0, 15)}...");
+                        Console.WriteLine($"[AUTH] Cookie 'jwt_token' trovato!");
                     }
                     else
                     {
@@ -54,7 +54,7 @@ public static class AuthExtensions
 
                 OnAuthenticationFailed = context =>
                 {
-                    Console.WriteLine($"[AUTH] Autenticazione FALLITA! Motivo: {context.Exception.Message}");
+                    Console.WriteLine($"[AUTH] Autenticazione FALLITA!");
 
                     if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                     {
@@ -71,7 +71,7 @@ public static class AuthExtensions
 
                 OnChallenge = context =>
                 {
-                    Console.WriteLine($"[AUTH] Challenge inviata al client. Errore: {context.Error}, Descrizione: {context.ErrorDescription}");
+                    Console.WriteLine($"[AUTH] Challenge inviata al client...");
                     return Task.CompletedTask;
                 }
             };

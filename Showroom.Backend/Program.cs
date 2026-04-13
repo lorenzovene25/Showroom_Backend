@@ -37,8 +37,10 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowFrontend"); // CORS middleware
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
+app.UseSecurityHeaders();
+
+app.UseTokenBlacklistMiddleware(); // Middleware per verificare la blacklist dei token
 
 app.UseAuthentication();
 app.UseAuthorization();

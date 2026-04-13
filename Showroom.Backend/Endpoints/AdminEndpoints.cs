@@ -7,7 +7,8 @@ public class AdminEndpoints
         var group = route.MapGroup("/api/admin")
             .WithGroupName("Admin")
             .WithDescription("Endpoints for admin users")
-            .RequireAuthorization("AdminPolicy");
+            .RequireAuthorization("AdminPolicy")
+            .RequireRateLimiting("RateLimit");
 
         group.MapPost("/exhibitions", CreateExhibition)
             .WithName("CreateExhibition")

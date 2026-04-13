@@ -1,4 +1,5 @@
-﻿using PW.WebApi.Endpoints;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using PW.WebApi.Endpoints;
 using Showroom.Backend.Endpoints;
 
 namespace Showroom.Backend.Extensions;
@@ -30,12 +31,30 @@ public static class WebApplicationExtensions
         {
             errorApp.Run(async context =>
             {
-                context.Response.StatusCode = 500;
+                var logger = context.RequestServices.GetRequiredService<ILoggerFactory>()
+                                                   .CreateLogger("GlobalExceptionHandler");
+
+                var exceptionHandlerPathFeature =
+                    context.Features.Get<IExceptionHandlerPathFeature>();
+
+                if (exceptionHandlerPathFeature?.Error is Exception ex)
+                {
+                    logger.LogError(ex, "Unhandled exception caught by global handler");
+                }
+
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
-                await context.Response.WriteAsJsonAsync(new { error = "Si è verificato un errore interno al server." });
+
+                var response = new
+                {
+                    error = "Si è verificato un errore interno al server."
+                };
+
+                await context.Response.WriteAsJsonAsync(response);
             });
         });
 
         return app;
     }
+
 }

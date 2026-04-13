@@ -11,7 +11,7 @@ public static class AuthEndpoints
     {
         var group = route.MapGroup("/api/auth")
                          .WithTags("Auth")
-                         .RequireRateLimiting("BaseRule");
+                         .RequireRateLimiting("AuthLimit");
 
         group.MapPost("login", LoginUser)
             .WithName("LoginUser")
@@ -35,19 +35,19 @@ public static class AuthEndpoints
     public static async Task<Results<Ok<UserDto>, BadRequest<string>>> LoginUser(LoginUserDto request, IUserService service, ILoggerFactory loggerFactory, HttpContext context)
     {
         var logger = loggerFactory.CreateLogger("AuthEndpoints");
-        logger.LogInformation("Login attempt for email: {Email}", request.Email);
+        logger.LogInformation("Login attempted");
 
         var token = await service.LoginAsync(request);
         if (token is null)
         {
-            logger.LogWarning("Login failed for email: {Email} - Invalid credentials", request.Email);
+            logger.LogWarning("Login failed: Invalid credentials");
             return TypedResults.BadRequest("Credenziali non valide");
         }
 
         var user = await service.GetByEmailAsync(request.Email!);
         if (user is null)
         {
-            logger.LogWarning("User not found for email: {Email}", request.Email);
+            logger.LogWarning("User not found");
             return TypedResults.BadRequest("Utente non trovato");
         }
 
@@ -65,10 +65,33 @@ public static class AuthEndpoints
         return TypedResults.Ok(user);
     }
 
-    public static Results<Ok<string>, BadRequest> LogoutUser(ILoggerFactory loggerFactory, HttpContext context)
+    public static async Task<Results<Ok<string>, BadRequest>> LogoutUser(ILoggerFactory loggerFactory, HttpContext context, ITokenBlacklistService blacklistService)
     {
         var logger = loggerFactory.CreateLogger("AuthEndpoints");
         logger.LogInformation("Logout attempt");
+
+        // Estrae il token dal cookie
+        if (context.Request.Cookies.TryGetValue("jwt_token", out var token))
+        {
+            // Aggiunge il token alla blacklist con il tempo di scadenza
+            // Di solito i token hanno una scadenza di 2 ore come visto nel login
+            var expirationTime = DateTime.UtcNow.AddHours(2);
+            await blacklistService.AddTokenAsync(token, expirationTime);
+            logger.LogInformation("Token aggiunto alla blacklist");
+        }
+        else
+        {
+            // Prova a leggere il token dall'header Authorization
+            var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+            if (authHeader?.StartsWith("Bearer ") == true)
+            {
+                var bearerToken = authHeader.Substring("Bearer ".Length).Trim();
+                var expirationTime = DateTime.UtcNow.AddHours(2);
+                await blacklistService.AddTokenAsync(bearerToken, expirationTime);
+                logger.LogInformation("Token da Authorization header aggiunto alla blacklist");
+            }
+        }
+
         context.Response.Cookies.Delete("jwt_token");
         logger.LogInformation("Logout successful");
         return TypedResults.Ok("Logout effettuato");
@@ -77,16 +100,15 @@ public static class AuthEndpoints
     public static async Task<Results<Ok<UserDto>, BadRequest<string>>> RegisterUser(CreateUserDto request, IUserService service, ILoggerFactory loggerFactory, HttpContext context)
     {
         var logger = loggerFactory.CreateLogger("AuthEndpoints");
-        logger.LogInformation("Registration attempt for email: {Email}", request.Email);
+        logger.LogInformation("Registration attempt...");
 
         var result = await service.RegisterAsync(request);
         if (!result)
         {
-            logger.LogWarning("Registration failed for email: {Email} - User may already exist", request.Email);
+            logger.LogWarning("Registration failed: User might already exists");
             return TypedResults.BadRequest("Registrazione fallita o utente già esistente");
         }
 
-        // Get the newly created user
         var user = await service.GetByEmailAsync(request.Email);
         if (user is null)
         {
@@ -94,7 +116,6 @@ public static class AuthEndpoints
             return TypedResults.BadRequest("Errore nel recupero dell'utente registrato");
         }
 
-        // Auto-login: generate token and set cookie
         var loginDto = new LoginUserDto { Email = request.Email, Password = request.Password };
         var token = await service.LoginAsync(loginDto);
 

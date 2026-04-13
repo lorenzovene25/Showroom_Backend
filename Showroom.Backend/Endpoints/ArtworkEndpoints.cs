@@ -10,7 +10,7 @@ public static class ArtworkEndpoints
     {
         var group = route.MapGroup("/api/artworks")
                          .WithTags("Artworks")
-                         .RequireRateLimiting("BaseRule");
+                         .RequireRateLimiting("RateLimit");
 
         // GET /artworks?culture=en
         group.MapGet("", GetArtworksAsync)
