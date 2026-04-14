@@ -19,6 +19,7 @@ public class CartItemDto
     public string? SouvenirName { get; set; }
     public decimal SouvenirPrice { get; set; }
     public int Quantity { get; set; }
+    public string SouvenirImageUrl { get; set; } = string.Empty;
 }
 
 public class AddCartItemDto

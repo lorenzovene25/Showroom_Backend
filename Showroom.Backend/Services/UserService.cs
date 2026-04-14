@@ -2,6 +2,7 @@ using Dapper;
 using Npgsql;
 using Showroom.Backend.Dtos;
 using Showroom.Backend.Security;
+using Showroom.Backend.Services.Interfaces;
 
 namespace Showroom.Backend.Services;
 
@@ -268,7 +269,8 @@ public class UserService : IUserService
                     ci.souvenir_id            AS SouvenirId,
                     COALESCE(t.name, en.name) AS SouvenirName,
                     s.price                   AS SouvenirPrice,
-                    ci.quantity               AS Quantity
+                    ci.quantity               AS Quantity,
+                    s.image_url               AS SouvenirImageUrl
                 FROM cart_items ci
                 JOIN souvenirs s ON s.id = ci.souvenir_id
                 LEFT JOIN souvenirs_translations t  ON t.souvenir_id = s.id AND t.language_code = @Culture

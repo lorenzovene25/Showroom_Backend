@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Showroom.Backend.Dtos;
-using Showroom.Backend.Services;
+using Showroom.Backend.Services.Interfaces;
 using Showroom.Backend.Utilities;
 
 namespace Showroom.Backend.Endpoints;

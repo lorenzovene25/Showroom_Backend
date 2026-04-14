@@ -1,10 +1,10 @@
 ﻿using Showroom.Backend.Dtos;
 
-namespace Showroom.Backend.Services;
+namespace Showroom.Backend.Services.Interfaces;
 
 public interface ICartService
 {
-    Task<CartItemDto?> AddItemAsync(int cartId, AddCartItemDto dto, string culture = "en");
+    Task<CartItemDto?> AddItemAsync(AddCartItemDto dto, int userId, string culture = "en");
     Task<bool> CheckoutAsync(int userId, bool isPaymentSuccessful);
     Task ClearAsync(int cartId);
     Task<int> CreateCartAsync();

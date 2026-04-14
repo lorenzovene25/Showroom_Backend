@@ -1,3 +1,4 @@
+using Showroom.Backend.Services.Interfaces;
 using System.Collections.Concurrent;
 
 namespace Showroom.Backend.Services;

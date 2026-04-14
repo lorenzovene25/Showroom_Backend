@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Showroom.Backend.Dtos;
-using Showroom.Backend.Services;
+using Showroom.Backend.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -233,7 +233,7 @@ public static class UserEndpoints
             return TypedResults.Forbid();
         }
 
-        var result = await service.AddItemAsync(userId, request, culture);
+        var result = await service.AddItemAsync(request, userId, culture);
         if (result is null)
         {
             logger.LogWarning("Cart not found for user ID: {UserId}", userId);

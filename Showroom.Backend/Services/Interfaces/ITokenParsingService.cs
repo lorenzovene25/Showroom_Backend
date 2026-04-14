@@ -1,6 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Showroom.Backend.Services;
+namespace Showroom.Backend.Services.Interfaces;
 
 /// <summary>
 /// Servizio per estrarre informazioni dai token JWT

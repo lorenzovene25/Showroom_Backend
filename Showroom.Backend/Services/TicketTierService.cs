@@ -1,6 +1,7 @@
 using Dapper;
 using Npgsql;
 using Showroom.Backend.Dtos;
+using Showroom.Backend.Services.Interfaces;
 
 namespace Showroom.Backend.Services;
 

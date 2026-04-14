@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
 using Showroom.Backend.Services;
 using Showroom.Backend.Security;
+using Showroom.Backend.Services.Interfaces;
 
 namespace Showroom.Backend.Extensions;
 

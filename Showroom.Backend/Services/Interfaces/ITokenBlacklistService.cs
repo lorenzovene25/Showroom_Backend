@@ -1,4 +1,4 @@
-namespace Showroom.Backend.Services;
+namespace Showroom.Backend.Services.Interfaces;
 
 public interface ITokenBlacklistService
 {

@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using Showroom.Backend.Dtos;
 
-namespace Showroom.Backend.Services
+namespace Showroom.Backend.Services.Interfaces
 {
     public interface IArtworkService
     {

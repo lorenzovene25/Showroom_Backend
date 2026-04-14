@@ -1,6 +1,7 @@
 using Dapper;
 using Npgsql;
 using Showroom.Backend.Dtos;
+using Showroom.Backend.Services.Interfaces;
 
 namespace Showroom.Backend.Services;
 
@@ -73,17 +74,27 @@ public class CartService : ICartService
         return cart;
     }
 
-    public async Task<CartItemDto?> AddItemAsync(int cartId, AddCartItemDto dto, string culture = "en")
+    public async Task<CartItemDto?> AddItemAsync(AddCartItemDto dto, int userId, string culture = "en")
     {
         using var conn = Conn();
+
+        const string getCartQuery = """
+            SELECT cart_id 
+            FROM users 
+            WHERE id = @UserId
+            """;
+
+        var cartId = await conn.ExecuteScalarAsync<int?>(getCartQuery, new { UserId = userId });
+
         const string query = """
             INSERT INTO cart_items (cart_id, souvenir_id, quantity)
             VALUES (@CartId, @SouvenirId, @Quantity)
             ON CONFLICT (cart_id, souvenir_id) 
             DO UPDATE SET quantity = cart_items.quantity + EXCLUDED.quantity
             """;
-        await conn.ExecuteAsync(query, new { CartId = cartId, SouvenirId = dto.SouvenirId, Quantity = dto.Quantity });
 
+        await conn.ExecuteAsync(query, new { CartId = cartId, SouvenirId = dto.SouvenirId, Quantity = dto.Quantity });
+        
         const string selectQuery = """
             SELECT
                 ci.id                     AS Id, 
@@ -98,6 +109,7 @@ public class CartService : ICartService
             LEFT JOIN souvenirs_translations en ON en.souvenir_id = s.id AND en.language_code = 'en'
             WHERE ci.cart_id = @CartId AND ci.souvenir_id = @SouvenirId
             """;
+        
         return await conn.QuerySingleOrDefaultAsync<CartItemDto>(selectQuery, new { CartId = cartId, SouvenirId = dto.SouvenirId, Culture = culture });
     }
 
@@ -133,7 +145,7 @@ public class CartService : ICartService
     public async Task<bool> RemoveItemAsync(int userId, int souvenirId)
     {
         using var conn = Conn();
-     
+
         const string checkUserQuery = """
             SELECT cart_id
             FROM users 
@@ -141,7 +153,7 @@ public class CartService : ICartService
             """;
 
         int? cartId = await conn.ExecuteScalarAsync<int?>(checkUserQuery, new { UserId = userId });
-        
+
         if (cartId is null) return false;
 
         const string query = """

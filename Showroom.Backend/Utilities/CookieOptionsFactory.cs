@@ -16,8 +16,6 @@ public static class CookieOptionsFactory
             Secure = true,
             SameSite = SameSiteMode.Strict,
             Expires = TokenExpirationHelper.CalculateCookieExpiration(expiryInMinutes),
-            // Garantisce che il cookie venga cancellato quando il browser si chiude
-            // Tuttavia, abbiamo comunque un Expires come fallback
             IsEssential = true
         };
     }

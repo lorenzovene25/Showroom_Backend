@@ -1,5 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
-using Showroom.Backend.Services;
+using Showroom.Backend.Services.Interfaces;
 
 namespace Showroom.Backend.Extensions;
 
