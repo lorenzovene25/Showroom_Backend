@@ -142,7 +142,7 @@ public static class AuthEndpoints
         var logger = loggerFactory.CreateLogger("AuthEndpoints");
         logger.LogInformation("Password change attempt for email: {Email}", request.Email);
 
-        var tokenEmailString = userTokenClaims.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? userTokenClaims.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
+        var tokenEmailString = userTokenClaims.FindFirst(ClaimTypes.Email)?.Value ?? userTokenClaims.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
         bool isAdmin = userTokenClaims.IsInRole("Admin");
         if (tokenEmailString != request.Email && !isAdmin)
         {
