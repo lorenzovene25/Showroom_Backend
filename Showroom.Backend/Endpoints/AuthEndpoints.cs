@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Showroom.Backend.Dtos;
 using Showroom.Backend.Services.Interfaces;
 using Showroom.Backend.Utilities;
+using Showroom.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Showroom.Backend.Endpoints;
 
@@ -134,10 +137,18 @@ public static class AuthEndpoints
         return TypedResults.Ok(user);
     }
 
-    public static async Task<Results<Ok<string>, BadRequest<string>>> ChangePasswordUser(ChangePasswordUserDto request, IUserService service, ILoggerFactory loggerFactory)
+    public static async Task<Results<Ok<string>, ForbidHttpResult, BadRequest<string>>> ChangePasswordUser(ChangePasswordUserDto request, int userId, IUserService service, ILoggerFactory loggerFactory, ClaimsPrincipal userTokenClaims)
     {
         var logger = loggerFactory.CreateLogger("AuthEndpoints");
         logger.LogInformation("Password change attempt for email: {Email}", request.Email);
+
+        var tokenIdString = userTokenClaims.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? userTokenClaims.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+        bool isAdmin = userTokenClaims.IsInRole("Admin");
+        if (tokenIdString != userId.ToString() && !isAdmin)
+        {
+            logger.LogWarning("Access denied to cart - Requested user ID: {RequestedUserId}, Token user ID: {TokenUserId}, IsAdmin: {IsAdmin}", userId, tokenIdString, isAdmin);
+            return TypedResults.Forbid();
+        }
 
         var result = await service.ChangePasswordAsync(request);
         if (!result)

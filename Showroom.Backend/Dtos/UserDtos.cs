@@ -40,9 +40,9 @@ public class PatchUserDto
 
 public class ChangePasswordUserDto
 {
-    public string? Email { get; set; }
-    public string? OldPassword { get; set; }
-    public string? NewPassword { get; set; }
+    public string Email { get; set; }
+    public string OldPassword { get; set; }
+    public string NewPassword { get; set; }
 }
 
 public class LoginUserDto
