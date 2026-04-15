@@ -46,6 +46,10 @@ public static class UserEndpoints
             .WithName("GetUserTickets")
             .WithSummary("Restituisce i biglietti di un utente per ID");
 
+        group.MapGet("{userId:int}/tickets", CreateTicket)
+            .WithName("CreateTicket")
+            .WithSummary("Crea un biglietto per un utente per ID");
+
         group.MapGet("{userId:int}/orders", GetUserOrders)
             .WithName("GetUserOrders")
             .WithSummary("Restituisce gli ordini di un utente per ID");
@@ -138,6 +142,28 @@ public static class UserEndpoints
         }
 
         logger.LogInformation("Tickets found for user ID: {UserId}", userId);
+        return TypedResults.Ok(result);
+    }
+
+    private static async Task<Results<Ok<TicketDto>, ForbidHttpResult, NotFound>> CreateTicket(int userId, CreateTicketDto request, ITicketService service, ILoggerFactory loggerFactory, ClaimsPrincipal userTokenClaims, string culture = "en")
+    {
+        var logger = loggerFactory.CreateLogger("UserEndpoints");
+        logger.LogInformation("Creating ticket for user ID: {UserId}, Culture: {Culture}", userId, culture);
+        var tokenIdString = userTokenClaims.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? userTokenClaims.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+        bool isAdmin = userTokenClaims.IsInRole("Admin");
+        if (tokenIdString != userId.ToString() && !isAdmin)
+        {
+            logger.LogWarning("Access denied to cart - Requested user ID: {RequestedUserId}, Token user ID: {TokenUserId}, IsAdmin: {IsAdmin}", userId, tokenIdString, isAdmin);
+            return TypedResults.Forbid();
+        }
+        request.UserId = userId;
+        var result = await service.CreateAsync(request, culture);
+        if (result is null)
+        {
+            logger.LogWarning("Failed to create ticket for user ID: {UserId}", userId);
+            return TypedResults.NotFound();
+        }
+        logger.LogInformation("Ticket created for user ID: {UserId}", userId);
         return TypedResults.Ok(result);
     }
 
