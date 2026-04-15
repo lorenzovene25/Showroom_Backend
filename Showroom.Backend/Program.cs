@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Showroom.Backend.Extensions;
 
+// Register Dapper type handlers for DateOnly and TimeOnly
+DapperSqlHandlersExtensions.AddDapperTypeHandlers();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();

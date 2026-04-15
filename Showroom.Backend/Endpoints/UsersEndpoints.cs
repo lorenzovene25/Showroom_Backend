@@ -46,7 +46,7 @@ public static class UserEndpoints
             .WithName("GetUserTickets")
             .WithSummary("Restituisce i biglietti di un utente per ID");
 
-        group.MapGet("{userId:int}/tickets", CreateTicket)
+        group.MapPost("{userId:int}/tickets", CreateTicket)
             .WithName("CreateTicket")
             .WithSummary("Crea un biglietto per un utente per ID");
 
@@ -156,7 +156,9 @@ public static class UserEndpoints
             logger.LogWarning("Access denied to cart - Requested user ID: {RequestedUserId}, Token user ID: {TokenUserId}, IsAdmin: {IsAdmin}", userId, tokenIdString, isAdmin);
             return TypedResults.Forbid();
         }
+
         request.UserId = userId;
+        
         var result = await service.CreateAsync(request, culture);
         if (result is null)
         {
