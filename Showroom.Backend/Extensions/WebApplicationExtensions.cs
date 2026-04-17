@@ -21,6 +21,8 @@ public static class WebApplicationExtensions
 
         app.MapAuthEndpoints();
 
+        app.MapMediaEndpoints();
+
         return app;
     }
 

@@ -29,6 +29,9 @@ public static class ServiceCollectionExtensions
         // Servizio per il parsing dei token JWT
         services.AddScoped<ITokenParsingService, TokenParsingService>();
 
+        // Servizio per gestire le immagini da wwwroot/media
+        services.AddScoped<IMediaService, MediaService>();
+
         return services;
     }
 
