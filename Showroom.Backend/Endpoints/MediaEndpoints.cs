@@ -9,16 +9,16 @@ public static class MediaEndpoints
 {
     public static void MapMediaEndpoints(this IEndpointRouteBuilder route)
     {
-        var group = route.MapGroup("/api/media")
-            .WithTags("Media")
+        var group = route.MapGroup("/api/previews")
+            .WithTags("Previews")
             .RequireRateLimiting("RateLimit");
 
-        // GET /api/media/artists
+        // GET /api/previews/artists
         group.MapGet("artists", GetArtistImagesAsync)
             .WithName("GetArtistImages")
             .WithSummary("Restituisce tutte le immagini degli artisti mappate con i loro nomi");
 
-        // GET /api/media/artists/{artistName}/preview
+        // GET /api/previews/artists/{artistName}/preview
         group.MapGet("artists/{artistName}/preview", GetArtistPreviewAsync)
             .WithName("GetArtistPreview")
             .WithSummary("Restituisce il path del preview di un artista");
