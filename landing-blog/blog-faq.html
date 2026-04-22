@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog & FAQ — Pixel Voyage | Fotografia, Arte e Cultura</title>
+  <meta name="description"
+    content="Articoli, curiosità e risposte alle domande più frequenti sulla mostra di Robert Doisneau a Pordenone. Tutto quello che devi sapere prima di venire.">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Dove si trova la mostra di Robert Doisneau?","acceptedAnswer":{"@type":"Answer","text":"La mostra è ospitata alla Galleria Harry Bertoia, in Corso Vittorio Emanuele II a Pordenone."}},
+    {"@type":"Question","name":"Quanto costa il biglietto per la mostra di Doisneau?","acceptedAnswer":{"@type":"Answer","text":"Il biglietto intero costa 12€, il ridotto 9€, gli studenti pagano 5€ e i bambini sotto i 6 anni entrano gratuitamente."}},
+    {"@type":"Question","name":"Fino a quando è aperta la mostra di Doisneau a Pordenone?","acceptedAnswer":{"@type":"Answer","text":"La mostra è aperta fino al 6 aprile 2026."}}
+  ]
+}
+</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --sepia: #c27a48;
+      --sepia-light: #d4956a;
+      --sepia-dim: rgba(194, 122, 72, 0.13);
+      --cream: #f0ebe0;
+      --cream-dark: #e4ddd0;
+      --dark: #1a1917;
+      --dark-card: #242220;
+      --dark-mid: #2e2b28;
+      --white: #faf8f5;
+      --muted: rgba(250, 248, 245, 0.55);
+      --muted-dark: rgba(26, 25, 23, 0.55);
+      --border-d: rgba(255, 255, 255, 0.08);
+      --border-l: rgba(26, 25, 23, 0.1);
+      --r: 20px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ─────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 36px;
+      background: rgba(26, 25, 23, 0.72);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-d);
+      border-radius: 999px;
+    }
+
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--white);
+    }
+
+    .nav-cta {
+      background: var(--sepia);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 9px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+
+    .nav-cta:hover {
+      background: var(--sepia-light);
+      transform: scale(1.03);
+    }
+
+    /* ── PAGE HERO ───────────────────────────────── */
+    .page-hero {
+      background: var(--dark);
+      padding: 140px 80px 0;
+      position: relative;
+      overflow: hidden;
+      min-height: 360px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .hero-bg-img {
+      position: absolute;
+      inset: 0;
+      background: url('artworks/RD015.jpg') center 30%/cover no-repeat;
+      filter: grayscale(0.5);
+      opacity: .18;
+    }
+
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .4;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--cream));
+      pointer-events: none;
+    }
+
+    .page-hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-bottom: 72px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: end;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sepia);
+      margin-bottom: 18px;
+    }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(44px, 6vw, 76px);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.0;
+      margin-bottom: 16px;
+    }
+
+    .page-hero h1 em {
+      color: var(--sepia);
+      font-style: italic;
+    }
+
+    .page-hero-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.75;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 12px;
+    }
+
+    .stat-pill {
+      background: var(--dark-card);
+      border: 1px solid var(--border-d);
+      border-radius: 16px;
+      padding: 18px 22px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--sepia);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── MAIN LAYOUT ─────────────────────────────── */
+    .content-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 60px 80px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 56px;
+      align-items: start;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    /* ── FEATURED ARTICLE ────────────────────────── */
+    .blog-section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .blog-section-head h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .see-all {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--sepia);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(194, 122, 72, 0.35);
+      padding-bottom: 2px;
+      transition: border-color .2s;
+    }
+
+    .see-all:hover {
+      border-color: var(--sepia);
+    }
+
+    .article-featured {
+      background: var(--dark);
+      border-radius: var(--r);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .25s, box-shadow .25s;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-d);
+    }
+
+    .article-featured:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 56px rgba(0, 0, 0, 0.22);
+    }
+
+    .feat-img {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feat-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(0.25);
+      display: block;
+      transition: transform .4s, filter .3s;
+    }
+
+    .article-featured:hover .feat-img img {
+      transform: scale(1.04);
+      filter: grayscale(0);
+    }
+
+    .feat-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: var(--sepia);
+      color: var(--white);
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .feat-body {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .a-cat {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sepia);
+      margin-bottom: 10px;
+    }
+
+    .feat-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 14px;
+    }
+
+    .feat-body p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      flex: 1;
+    }
+
+    .a-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-d);
+    }
+
+    .a-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .a-read-link {
+      margin-left: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--sepia);
+      text-decoration: none;
+    }
+
+    /* ── ARTICLE GRID ────────────────────────────── */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 56px;
+      max-width: 100%;
+    }
+
+    .article-card {
+      background: var(--white);
+      border: 1px solid var(--border-l);
+      border-radius: var(--r);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s, box-shadow .2s;
+      min-width: 0;
+    }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-img {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(0.2);
+      display: block;
+      transition: transform .35s, filter .3s;
+    }
+
+    .article-card:hover .card-img img {
+      transform: scale(1.05);
+      filter: grayscale(0);
+    }
+
+    .card-body {
+      padding: 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .card-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.35;
+      margin-bottom: 8px;
+      margin-top: 6px;
+    }
+
+    .card-body p {
+      font-size: 13px;
+      color: var(--muted-dark);
+      line-height: 1.72;
+      flex: 1;
+    }
+
+    .card-foot {
+      padding: 11px 22px;
+      border-top: 1px solid var(--border-l);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      color: var(--muted-dark);
+    }
+
+    .c-readlink {
+      color: var(--sepia);
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    /* ── FAQ ─────────────────────────────────────── */
+    .faq-wrap {
+      background: var(--dark);
+      border-radius: var(--r);
+      padding: 40px;
+      margin-bottom: 0;
+      border: 1px solid var(--border-d);
+    }
+
+    .faq-head-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sepia);
+      margin-bottom: 12px;
+    }
+
+    .faq-head-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 2.8vw, 36px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .faq-head-title em {
+      color: var(--sepia);
+      font-style: italic;
+    }
+
+    .faq-head-sub {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+      max-width: 540px;
+    }
+
+    .faq-group-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sepia);
+      padding: 24px 0 4px;
+      border-bottom: 1px solid rgba(194, 122, 72, 0.2);
+      margin-bottom: 0;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-d);
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      cursor: pointer;
+      gap: 20px;
+      user-select: none;
+    }
+
+    .faq-question h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.35;
+    }
+
+    .faq-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--dark-mid);
+      border: 1px solid var(--border-d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sepia);
+      font-size: 17px;
+      font-weight: 300;
+      transition: background .2s, transform .3s;
+    }
+
+    .faq-item.open .faq-icon {
+      background: var(--sepia);
+      color: var(--white);
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .4s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 500px;
+    }
+
+    .faq-answer-inner {
+      padding-bottom: 20px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .faq-answer-inner strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .faq-answer-inner a {
+      color: var(--sepia);
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────── */
+    .sidebar {
+      position: sticky;
+      top: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sb-card {
+      border-radius: var(--r);
+      overflow: hidden;
+      border: 1px solid var(--border-l);
+    }
+
+    .sb-dark {
+      background: var(--dark);
+      border-color: var(--border-d);
+    }
+
+    .sb-light {
+      background: var(--white);
+    }
+
+    .sb-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    .sb-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(0.2);
+      display: block;
+    }
+
+    .sb-body {
+      padding: 20px 22px;
+    }
+
+    .sb-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sepia);
+      margin-bottom: 8px;
+    }
+
+    .sb-dark .sb-body h3,
+    .sb-dark .sb-body .sb-eyebrow+h3 {
+      color: var(--white);
+    }
+
+    .sb-light .sb-body h3 {
+      color: var(--dark);
+    }
+
+    .sb-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .sb-body p {
+      font-size: 12px;
+      color: var(--muted-dark);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .sb-dark .sb-body p {
+      color: var(--muted);
+    }
+
+    .sb-btn {
+      display: block;
+      text-align: center;
+      background: var(--sepia);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 11px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+    .sb-btn:hover {
+      background: var(--sepia-light);
+    }
+
+    .sb-countdown {
+      padding: 22px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-d);
+    }
+
+    .sb-countdown .cd-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 900;
+      color: var(--sepia);
+      line-height: 1;
+    }
+
+    .sb-countdown .cd-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .sb-tags {
+      padding: 16px 22px 20px;
+    }
+
+    .sb-tags .sb-eyebrow {
+      margin-bottom: 12px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .tag-pill {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      background: var(--cream);
+      border: 1px solid var(--border-l);
+      color: var(--muted-dark);
+      padding: 4px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+
+    .tag-pill:hover {
+      background: var(--sepia-dim);
+      color: var(--sepia);
+      border-color: rgba(194, 122, 72, 0.3);
+    }
+
+    /* ── NEWSLETTER ──────────────────────────────── */
+    .newsletter {
+      background: var(--dark);
+      padding: 60px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .newsletter-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 2.8vw, 32px);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .newsletter-text h3 em {
+      color: var(--sepia);
+      font-style: italic;
+    }
+
+    .newsletter-text p {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 380px;
+      line-height: 1.65;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .newsletter-form input {
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--border-d);
+      background: var(--dark-card);
+      color: var(--white);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      width: 220px;
+      transition: border-color .2s;
+    }
+
+    .newsletter-form input::placeholder {
+      color: var(--muted);
+    }
+
+    .newsletter-form input:focus {
+      border-color: rgba(194, 122, 72, 0.5);
+    }
+
+    .newsletter-form button {
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: none;
+      background: var(--sepia);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s;
+      font-family: inherit;
+    }
+
+    .newsletter-form button:hover {
+      background: var(--sepia-light);
+    }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      background: rgba(10, 9, 8, 0.98);
+      border-top: 1px solid var(--border-d);
+      padding: 22px 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    footer p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    footer p strong {
+      color: var(--white);
+    }
+
+    footer .mono {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 1100px) {
+      .content-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        padding: 13px 22px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .page-hero {
+        padding: 120px 24px 0;
+      }
+
+      .page-hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        display: none;
+      }
+
+      .content-wrap {
+        padding: 40px 24px;
+      }
+
+      .article-featured {
+        grid-template-columns: 1fr;
+      }
+
+      .articles-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .faq-wrap {
+        padding: 28px;
+      }
+
+      .newsletter {
+        padding: 40px 24px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      footer {
+        padding: 20px 24px;
+      }
+
+      .sidebar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── ANIMATIONS ──────────────────────────────── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page-hero-inner {
+      animation: fadeUp .7s ease both;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="landing.html">Pixel Voyage</a>
+    <ul class="nav-links">
+      <li><a href="#">Gli artisti</a></li>
+      <li><a href="#">Opere</a></li>
+      <li><a href="#">Mostre</a></li>
+      <li><a href="#">Negozio</a></li>
+      <li><a href="#" class="active">Blog & FAQ</a></li>
+    </ul>
+    <a class="nav-cta" href="landing.html#biglietti">🎟 Acquista Biglietti</a>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="hero-bg-img"></div>
+    <div class="hero-grain"></div>
+    <div class="page-hero-inner">
+      <div>
+        <div class="hero-eyebrow">Cultura · Fotografia · Approfondimenti</div>
+        <h1>Blog &amp;<br><em>FAQ</em></h1>
+        <p class="page-hero-sub">Tutto quello che vuoi sapere su Robert Doisneau, sulla mostra di Pordenone e sulla
+          fotografia di strada francese.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <div class="stat-num">12</div>
+          <div class="stat-label">Articoli</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-num">24</div>
+          <div class="stat-label">FAQ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT + SIDEBAR -->
+  <div class="content-wrap">
+    <main>
+      <!-- BLOG -->
+      <div class="blog-section-head">
+        <h2>Ultimi articoli</h2>
+        <a class="see-all" href="#">Vedi tutti →</a>
+      </div>
+
+      <!-- FEATURED -->
+      <a class="article-featured" href="#">
+        <div class="feat-img">
+          <img src="artworks/RD008.jpg" alt="Il bacio di Doisneau">
+          <div class="feat-badge">In evidenza</div>
+        </div>
+        <div class="feat-body">
+          <div>
+            <div class="a-cat">Storia & Fotografia</div>
+            <h3>La vera storia dietro "Il Bacio dell'Hôtel de Ville"</h3>
+            <p>Non era un momento spontaneo. Doisneau aveva pagato due attori per posare davanti al caffè. Solo decenni
+              dopo la verità è emersa, scatenando controversie legali. Ecco cosa è successo davvero.</p>
+          </div>
+          <div class="a-meta">
+            <span class="a-date">MAR 2026</span>
+            <span style="font-size:12px;color:var(--muted);">7 min lettura</span>
+            <span class="a-read-link">Leggi →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ARTICLES GRID -->
+      <div class="articles-grid">
+        <a class="article-card" href="#">
+          <div class="card-img"><img src="artworks/RD002.jpg" alt="Accordion Street Girl" loading="lazy"></div>
+          <div class="card-body">
+            <div class="a-cat">Analisi dell'opera</div>
+            <h3>La fisarmonica e i portici: Parigi sonora di Doisneau</h3>
+            <p>Come la musica di strada diventa poesia visiva attraverso l'obiettivo del fotografo più amato di Parigi.
+            </p>
+          </div>
+          <div class="card-foot"><span>FEB 2026 · 5 MIN</span><span class="c-readlink">Leggi →</span></div>
+        </a>
+        <a class="article-card" href="#">
+          <div class="card-img"><img src="artworks/RD005.jpg" alt="Children of Place Hébert" loading="lazy"></div>
+          <div class="card-body">
+            <div class="a-cat">Bambini & Umanità</div>
+            <h3>I bambini di Doisneau: innocenza come atto politico</h3>
+            <p>Nel dopoguerra segnato dalla ricostruzione, immortalare il gioco nei quartieri operai era un gesto di
+              speranza.</p>
+          </div>
+          <div class="card-foot"><span>GEN 2026 · 6 MIN</span><span class="c-readlink">Leggi →</span></div>
+        </a>
+        <a class="article-card" href="#">
+          <div class="card-img"><img src="artworks/RD015.jpg" alt="Picasso and the Little Breads" loading="lazy"></div>
+          <div class="card-body">
+            <div class="a-cat">Ritratti celebri</div>
+            <h3>Picasso e le baguette: la foto più divertente del '52</h3>
+            <p>Dietro quello scatto iconico c'è una storia di amicizia, ironia e una colazione improvvisata nello studio
+              di Vallauris.</p>
+          </div>
+          <div class="card-foot"><span>DIC 2025 · 4 MIN</span><span class="c-readlink">Leggi →</span></div>
+        </a>
+        <a class="article-card" href="#">
+          <div class="card-img"><img src="artworks/RD020.jpg" alt="An Oblique Look" loading="lazy"></div>
+          <div class="card-body">
+            <div class="a-cat">Tecnica</div>
+            <h3>Lo sguardo obliquo: l'ironia come metodo visivo</h3>
+            <p>Doisneau usava l'umorismo come strumento critico. Ogni dettaglio fuori posto è una nota a margine sul
+              carattere umano.</p>
+          </div>
+          <div class="card-foot"><span>NOV 2025 · 5 MIN</span><span class="c-readlink">Leggi →</span></div>
+        </a>
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-wrap" id="faq">
+        <div class="faq-head-eyebrow">Domande frequenti</div>
+        <h2 class="faq-head-title">Tutto quello che<br>devi <em>sapere</em></h2>
+        <p class="faq-head-sub">Risposte alle domande più comuni sulla mostra, i biglietti e come organizzare la visita
+          a Pordenone.</p>
+
+        <div class="faq-list">
+
+          <div class="faq-group-label">La mostra</div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Chi era Robert Doisneau e perché è importante?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">Robert Doisneau (1912–1994) è considerato uno dei più grandi fotografi di
+                strada del XX secolo. Ha immortalato la Parigi popolare del dopoguerra con uno sguardo tra il tenero e
+                l'ironico. Il suo lavoro, caratterizzato da <strong>umanità, humor e rispetto</strong> per i soggetti,
+                ha definito un intero genere. La sua opera più famosa, "Il bacio dell'Hôtel de Ville" (1950), è
+                diventata uno dei simboli della città di Parigi nel mondo.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Quante opere sono esposte alla mostra?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">La retrospettiva presenta <strong>20 opere originali</strong> di Robert
+                Doisneau, selezionate tra le più significative della sua carriera. Dalle scene di vita quotidiana ai
+                ritratti celebri, il percorso racconta quarant'anni di fotografia parigina. È accompagnato da didascalie
+                bilingue (italiano e francese) e pannelli biografici.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Ci sono visite guidate?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">Sì, le visite guidate sono disponibili principalmente durante i <strong>fine
+                  settimana</strong> e spesso incluse nel prezzo del biglietto o disponibili con un piccolo supplemento.
+                Il nostro formato <strong>Sunday Photowalk</strong> include anche un'uscita fotografica guidata per le
+                vie di Pordenone dopo la visita. Consigliamo di verificare il calendario aggiornato o contattarci
+                direttamente.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>La mostra è adatta ai bambini?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">Assolutamente sì. La fotografia di Doisneau è immediata, divertente e ricca
+                di scene di vita quotidiana. Le immagini di bambini per le strade di Parigi sono tra le più amate di
+                tutta la mostra. I <strong>bambini fino a 6 anni entrano gratuitamente</strong>. È un'esperienza pensata
+                davvero per tutti.</div>
+            </div>
+          </div>
+
+          <div class="faq-group-label">Biglietti & Orari</div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Quanto costa il biglietto per la mostra?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">Il biglietto <strong>intero costa 12€</strong>. Il <strong>ridotto è
+                  9€</strong> (over 65, disabili e accompagnatori). Gli <strong>studenti pagano 5€</strong> con
+                tesserino valido. L'ingresso è <strong>gratuito</strong> per bambini sotto i 6 anni e persone con
+                disabilità grave. È disponibile anche un <strong>Biglietto Combo "Sul Leggere"</strong> con un piccolo
+                sovrapprezzo che include le mostre di Olivia Arthur e Seiichi Furuya.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Quali sono gli orari della mostra?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">La mostra è aperta: <strong>Sabato e Domenica</strong> 10:00–13:00 e
+                15:00–19:00. <strong>Mercoledì, Giovedì e Venerdì</strong> 15:00–19:00. È chiusa il lunedì e il martedì.
+                È aperta durante le principali festività: <strong>8 e 26 dicembre, Epifania, Pasqua e
+                  Pasquetta</strong>.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Fino a quando è aperta la mostra?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">La mostra è in corso dal <strong>22 novembre 2025</strong> e chiude il
+                <strong>6 aprile 2026</strong>. Dopo quella data, le opere rientreranno negli archivi privati e non
+                saranno più visibili dal vivo in regione per il prossimo futuro.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>È possibile acquistare i biglietti online?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">Sì, i biglietti sono acquistabili online tramite il sito Pixel Voyage.
+                Consigliamo di farlo in anticipo, specialmente per i weekend, per evitare attese in cassa e assicurarti
+                l'orario preferito. <a href="landing.html#biglietti">Acquista qui →</a></div>
+            </div>
+          </div>
+
+          <div class="faq-group-label">Dove & Come arrivare</div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Dove si trova la Galleria Bertoia?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">La Galleria Harry Bertoia si trova in <strong>Corso Vittorio Emanuele
+                  II</strong>, nel cuore del centro storico di Pordenone, sotto i caratteristici portici affrescati. È
+                raggiungibile a piedi dalla stazione dei treni in <strong>10–15 minuti</strong>.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Come si raggiunge Pordenone da Venezia o Trieste?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">Pordenone è collegata con treni diretti da <strong>Venezia e Mestre</strong>
+                (circa 50 minuti) e da <strong>Trieste</strong> (circa 90 minuti). La stazione è vicinissima alla
+                galleria: basta percorrere il Corso Vittorio Emanuele II per 10-15 minuti. Il nostro consiglio:
+                <strong>vieni in treno</strong>, lascia la macchina a casa.</div>
+            </div>
+          </div>
+
+          <div class="faq-group-label">Organizzare la visita</div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Vale la pena venire da fuori Pordenone?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">Decisamente sì. Il progetto <strong>"Sul Leggere"</strong> offre tre mostre
+                fotografiche di livello internazionale (Doisneau, Olivia Arthur, Seiichi Furuya) nello stesso percorso.
+                Con il biglietto combo trasformi la visita in un vero evento culturale. Aggiungi un aperitivo sotto i
+                portici medievali e hai una giornata indimenticabile.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <h3>Qual è il momento migliore per visitare senza fila?</h3>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">Per un'esperienza tranquilla consigliamo i <strong>pomeriggi nei giorni
+                  feriali</strong> (mercoledì–venerdì, 15:00–19:00). Per le visite guidate o il Sunday Photowalk, punta
+                ai <strong>fine settimana</strong>. In ogni caso, acquistare online in anticipo evita qualsiasi attesa.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sb-card sb-dark">
+        <div class="sb-countdown">
+          <div class="cd-num" id="sb-days">—</div>
+          <div class="cd-label">giorni alla chiusura</div>
+        </div>
+        <div class="sb-body">
+          <div class="sb-eyebrow">Acquista ora</div>
+          <h3 style="color:var(--white);">Prenota il tuo ingresso</h3>
+          <p>La mostra chiude il <strong style="color:var(--sepia)">6 aprile 2026</strong>. Non rimandare.</p>
+          <a class="sb-btn" href="landing.html#biglietti">🎟 Acquista Online</a>
+        </div>
+      </div>
+
+      <div class="sb-card sb-light">
+        <div class="sb-img"><img src="artworks/RD009.jpg" alt="The Last Waltz of July 14" loading="lazy"></div>
+        <div class="sb-body">
+          <div class="sb-eyebrow">Prossime mostre</div>
+          <h3>O. Arthur · S. Furuya · S. Moshammer</h3>
+          <p>Tre nuove retrospettive in arrivo. Abbonati alla newsletter per non perdere la data di apertura.</p>
+          <a class="sb-btn" href="#newsletter" style="background:var(--dark);color:var(--white);">Iscriviti →</a>
+        </div>
+      </div>
+
+      <div class="sb-card sb-light">
+        <div class="sb-tags">
+          <div class="sb-eyebrow">Esplora per tema</div>
+          <div class="tag-list">
+            <a class="tag-pill" href="#">Fotografia di strada</a>
+            <a class="tag-pill" href="#">Parigi</a>
+            <a class="tag-pill" href="#">Anni '50</a>
+            <a class="tag-pill" href="#">Bambini</a>
+            <a class="tag-pill" href="#">Il Bacio</a>
+            <a class="tag-pill" href="#">Doisneau</a>
+            <a class="tag-pill" href="#">Bianco & Nero</a>
+            <a class="tag-pill" href="#">Ritratto</a>
+            <a class="tag-pill" href="#">Umorismo</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter" id="newsletter">
+    <div class="newsletter-text">
+      <h3>Rimani nel <em>loop</em></h3>
+      <p>Articoli, curiosità fotografiche e anteprime delle prossime mostre. Una newsletter mensile, zero spam.</p>
+    </div>
+    <div class="newsletter-form">
+      <input type="email" placeholder="La tua email">
+      <button type="button">📩 Iscriviti</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <p>© 2026 <strong>Pixel Voyage</strong>. Tutti i diritti riservati.</p>
+      <p class="mono">Progettato & Sviluppato da PyTech: G. Rossi, N. Singh, L. Veneruzzo, R. Ranghiuc</p>
+    </div>
+    <a href="landing.html" style="font-size:12px;color:var(--muted);text-decoration:none;">← Torna alla mostra</a>
+  </footer>
+
+  <script>
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+
+    function updateCd() {
+      const target = new Date('2026-04-06T19:00:00');
+      const days = Math.max(0, Math.floor((target - new Date()) / (1000 * 60 * 60 * 24)));
+      const el = document.getElementById('sb-days');
+      if (el) el.textContent = days;
+    }
+    updateCd();
+    setInterval(updateCd, 60000);
+  </script>
+</body>
+
+</html>
